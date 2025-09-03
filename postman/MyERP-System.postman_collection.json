@@ -1,0 +1,323 @@
+{
+	"info": {
+		"_postman_id": "myerp-system-collection",
+		"name": "MyERP - Sistema Completo",
+		"description": "Collection completa do sistema MyERP com todos os módulos e fluxos de teste",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "🔐 1. Auth Service",
+			"item": [
+				{
+					"name": "Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('jwt_token', response.token);",
+									"    pm.environment.set('user_id', response.userId);",
+									"    pm.environment.set('user_role', response.role);",
+									"    console.log('Token JWT salvo:', response.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"admin\",\n  \"senha\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["auth", "login"]
+						},
+						"description": "Login do administrador - salva token automaticamente"
+					}
+				},
+				{
+					"name": "Login Funcionário",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('jwt_token_funcionario', response.token);",
+									"    pm.environment.set('funcionario_id', response.userId);",
+									"    console.log('Token Funcionário salvo:', response.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"funcionario\",\n  \"senha\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["auth", "login"]
+						},
+						"description": "Login do funcionário - salva token automaticamente"
+					}
+				},
+				{
+					"name": "Validar Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/auth/validate",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["auth", "validate"]
+						},
+						"description": "Valida se o token JWT está válido"
+					}
+				},
+				{
+					"name": "Criar Usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Silva\",\n  \"cpf\": \"12345678901\",\n  \"login\": \"joao\",\n  \"senha\": \"123456\",\n  \"role\": \"FUNCIONARIO\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/users",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["auth", "users"]
+						},
+						"description": "Criar novo usuário no sistema"
+					}
+				}
+			],
+			"description": "Endpoints de autenticação e gerenciamento de usuários"
+		},
+		{
+			"name": "👥 2. RH Module",
+			"item": [
+				{
+					"name": "Registrar Ponto (Funcionário)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token_funcionario}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/pontos/{{funcionario_id}}/registrar",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "pontos", "{{funcionario_id}}", "registrar"]
+						},
+						"description": "Funcionário registra seu próprio ponto"
+					}
+				},
+				{
+					"name": "Consultar Pontos (Funcionário)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token_funcionario}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/pontos/{{funcionario_id}}",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "pontos", "{{funcionario_id}}"]
+						},
+						"description": "Funcionário consulta seus próprios registros"
+					}
+				},
+				{
+					"name": "Listar Funcionários (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/funcionarios",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "admin", "funcionarios"]
+						},
+						"description": "Admin lista todos os funcionários"
+					}
+				},
+				{
+					"name": "Criar Funcionário (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Maria Santos\",\n  \"cpf\": \"98765432100\",\n  \"login\": \"maria\",\n  \"senha\": \"123456\",\n  \"role\": \"FUNCIONARIO\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/admin/funcionarios",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "admin", "funcionarios"]
+						},
+						"description": "Admin cria novo funcionário"
+					}
+				},
+				{
+					"name": "Listar Todos os Pontos (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/pontos",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "admin", "pontos"]
+						},
+						"description": "Admin visualiza todos os registros de ponto"
+					}
+				}
+			],
+			"description": "Endpoints do módulo de RH - funcionários e controle de ponto"
+		},
+		{
+			"name": "📷 3. Biometria Module",
+			"item": [
+				{
+					"name": "Simular Detecção - Entrada",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/biometria/simular-deteccao?nomeFuncionario=João Silva&movimento=ENTRADA",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["api", "biometria", "simular-deteccao"],
+							"query": [
+								{
+									"key": "nomeFuncionario",
+									"value": "João Silva"
+								},
+								{
+									"key": "movimento",
+									"value": "ENTRADA"
+								}
+							]
+						},
+						"description": "Simula detecção facial de entrada"
+					}
+				},
+				{
+					"name": "Listar Eventos de Detecção",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/biometria/eventos",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["api", "biometria", "eventos"]
+						},
+						"description": "Lista todos os eventos de detecção facial"
+					}
+				},
+				{
+					"name": "Dashboard Biometria",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/biometria/dashboard",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["api", "biometria", "dashboard"]
+						},
+						"description": "Dashboard com estatísticas do sistema de biometria"
+					}
+				}
+			],
+			"description": "Endpoints do módulo de biometria - reconhecimento facial e automação"
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
