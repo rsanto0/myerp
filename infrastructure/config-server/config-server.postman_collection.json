@@ -1,0 +1,185 @@
+{
+	"info": {
+		"name": "Config Server - Standalone",
+		"description": "Testes isolados do Config Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "config_base_url",
+			"value": "http://localhost:8888",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "⚙️ Configurações por Serviço",
+			"item": [
+				{
+					"name": "Configurações Globais",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/application/default",
+							"host": ["{{config_base_url}}"],
+							"path": ["application", "default"]
+						}
+					}
+				},
+				{
+					"name": "API Gateway Config",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/api-gateway/default",
+							"host": ["{{config_base_url}}"],
+							"path": ["api-gateway", "default"]
+						}
+					}
+				},
+				{
+					"name": "Financial Service Config",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/financial-service/default",
+							"host": ["{{config_base_url}}"],
+							"path": ["financial-service", "default"]
+						}
+					}
+				},
+				{
+					"name": "Company Service Config",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/company-service/default",
+							"host": ["{{config_base_url}}"],
+							"path": ["company-service", "default"]
+						}
+					}
+				},
+				{
+					"name": "Auth Service Config",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/auth-service/default",
+							"host": ["{{config_base_url}}"],
+							"path": ["auth-service", "default"]
+						}
+					}
+				},
+				{
+					"name": "RH Service Config",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/rh-service/default",
+							"host": ["{{config_base_url}}"],
+							"path": ["rh-service", "default"]
+						}
+					}
+				},
+				{
+					"name": "Biometria Service Config",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/biometria-service/default",
+							"host": ["{{config_base_url}}"],
+							"path": ["biometria-service", "default"]
+						}
+					}
+				},
+				{
+					"name": "Monitoring Service Config",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/monitoring-service/default",
+							"host": ["{{config_base_url}}"],
+							"path": ["monitoring-service", "default"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔄 Configurações por Profile",
+			"item": [
+				{
+					"name": "Financial - Local Profile",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/financial-service/local",
+							"host": ["{{config_base_url}}"],
+							"path": ["financial-service", "local"]
+						}
+					}
+				},
+				{
+					"name": "Financial - Docker Profile",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/financial-service/docker",
+							"host": ["{{config_base_url}}"],
+							"path": ["financial-service", "docker"]
+						}
+					}
+				},
+				{
+					"name": "Company - AWS Profile",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/company-service/aws",
+							"host": ["{{config_base_url}}"],
+							"path": ["company-service", "aws"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔍 Health Check",
+			"item": [
+				{
+					"name": "Config Server Health",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/actuator/health",
+							"host": ["{{config_base_url}}"],
+							"path": ["actuator", "health"]
+						}
+					}
+				},
+				{
+					"name": "Config Server Info",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{config_base_url}}/actuator/info",
+							"host": ["{{config_base_url}}"],
+							"path": ["actuator", "info"]
+						}
+					}
+				},
+				{
+					"name": "Refresh Configurations",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{config_base_url}}/actuator/refresh",
+							"host": ["{{config_base_url}}"],
+							"path": ["actuator", "refresh"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

@@ -26,6 +26,9 @@ services:
   eureka:
     host: ${EUREKA_HOST:localhost}
     port: ${EUREKA_PORT:8761}
+  config-server:
+    host: ${CONFIG_HOST:localhost}
+    port: ${CONFIG_PORT:8888}
   api-gateway:
     host: ${GATEWAY_HOST:localhost}
     port: ${GATEWAY_PORT:8080}
@@ -38,6 +41,12 @@ services:
   biometria-module:
     host: ${BIOMETRIA_HOST:localhost}
     port: ${BIOMETRIA_PORT:8083}
+  company-module:
+    host: ${COMPANY_HOST:localhost}
+    port: ${COMPANY_PORT:8085}
+  financial-module:
+    host: ${FINANCIAL_HOST:localhost}
+    port: ${FINANCIAL_PORT:8086}
 
 management:
   endpoints:

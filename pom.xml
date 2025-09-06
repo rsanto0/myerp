@@ -28,6 +28,7 @@
     <modules>
         <!-- Infraestrutura -->
         <module>infrastructure/service-discovery</module>
+        <module>infrastructure/config-server</module>
         <module>infrastructure/api-gateway</module>
         <module>infrastructure/auth-service</module>
         
@@ -35,6 +36,8 @@
         <module>modules/rh-module</module>
         <module>modules/biometria-module</module>
         <module>modules/monitoring-module</module>
+        <module>modules/company-module</module>
+        <module>modules/financial-module</module>
         
         <!-- Bibliotecas Compartilhadas -->
         <module>shared/common-lib</module>
@@ -54,6 +57,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
+                <version>42.7.3</version>
                 <scope>runtime</scope>
             </dependency>
             

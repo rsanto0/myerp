@@ -1,0 +1,268 @@
+{
+	"info": {
+		"name": "RH Module - Standalone",
+		"description": "Testes isolados do RH Module",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "rh_base_url",
+			"value": "http://localhost:8082",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "funcionario_id",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "👤 Funcionários (FUNCIONARIO)",
+			"item": [
+				{
+					"name": "Registrar Ponto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "{{user_id}}"
+							},
+							{
+								"key": "X-User-Login",
+								"value": "funcionario"
+							},
+							{
+								"key": "X-User-Role",
+								"value": "FUNCIONARIO"
+							}
+						],
+						"url": {
+							"raw": "{{rh_base_url}}/pontos/{{funcionario_id}}/registrar",
+							"host": ["{{rh_base_url}}"],
+							"path": ["pontos", "{{funcionario_id}}", "registrar"]
+						}
+					}
+				},
+				{
+					"name": "Listar Meus Pontos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "{{user_id}}"
+							},
+							{
+								"key": "X-User-Login",
+								"value": "funcionario"
+							},
+							{
+								"key": "X-User-Role",
+								"value": "FUNCIONARIO"
+							}
+						],
+						"url": {
+							"raw": "{{rh_base_url}}/pontos/{{funcionario_id}}",
+							"host": ["{{rh_base_url}}"],
+							"path": ["pontos", "{{funcionario_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔧 Admin (ADMIN)",
+			"item": [
+				{
+					"name": "Listar Funcionários",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "1"
+							},
+							{
+								"key": "X-User-Login",
+								"value": "admin"
+							},
+							{
+								"key": "X-User-Role",
+								"value": "ADMIN"
+							}
+						],
+						"url": {
+							"raw": "{{rh_base_url}}/admin/funcionarios",
+							"host": ["{{rh_base_url}}"],
+							"path": ["admin", "funcionarios"]
+						}
+					}
+				},
+				{
+					"name": "Criar Funcionário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "1"
+							},
+							{
+								"key": "X-User-Login",
+								"value": "admin"
+							},
+							{
+								"key": "X-User-Role",
+								"value": "ADMIN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Silva\",\n  \"cpf\": \"98765432100\",\n  \"login\": \"joao.silva\",\n  \"senha\": \"1234\",\n  \"role\": \"FUNCIONARIO\"\n}"
+						},
+						"url": {
+							"raw": "{{rh_base_url}}/admin/funcionarios",
+							"host": ["{{rh_base_url}}"],
+							"path": ["admin", "funcionarios"]
+						}
+					}
+				},
+				{
+					"name": "Criar Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "1"
+							},
+							{
+								"key": "X-User-Login",
+								"value": "admin"
+							},
+							{
+								"key": "X-User-Role",
+								"value": "ADMIN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Maria Admin\",\n  \"cpf\": \"12345678900\",\n  \"login\": \"maria.admin\",\n  \"senha\": \"admin456\",\n  \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "{{rh_base_url}}/admin/funcionarios",
+							"host": ["{{rh_base_url}}"],
+							"path": ["admin", "funcionarios"]
+						}
+					}
+				},
+				{
+					"name": "Remover Funcionário",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "1"
+							},
+							{
+								"key": "X-User-Login",
+								"value": "admin"
+							},
+							{
+								"key": "X-User-Role",
+								"value": "ADMIN"
+							}
+						],
+						"url": {
+							"raw": "{{rh_base_url}}/admin/funcionarios/2",
+							"host": ["{{rh_base_url}}"],
+							"path": ["admin", "funcionarios", "2"]
+						}
+					}
+				},
+				{
+					"name": "Listar Todos os Pontos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "1"
+							},
+							{
+								"key": "X-User-Login",
+								"value": "admin"
+							},
+							{
+								"key": "X-User-Role",
+								"value": "ADMIN"
+							}
+						],
+						"url": {
+							"raw": "{{rh_base_url}}/admin/pontos",
+							"host": ["{{rh_base_url}}"],
+							"path": ["admin", "pontos"]
+						}
+					}
+				},
+				{
+					"name": "Remover Ponto",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "1"
+							},
+							{
+								"key": "X-User-Login",
+								"value": "admin"
+							},
+							{
+								"key": "X-User-Role",
+								"value": "ADMIN"
+							}
+						],
+						"url": {
+							"raw": "{{rh_base_url}}/admin/pontos/1",
+							"host": ["{{rh_base_url}}"],
+							"path": ["admin", "pontos", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔍 Health Check",
+			"item": [
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{rh_base_url}}/actuator/health",
+							"host": ["{{rh_base_url}}"],
+							"path": ["actuator", "health"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

@@ -256,8 +256,57 @@
 						"description": "Admin visualiza todos os registros de ponto"
 					}
 				}
+				},
+				{
+					"name": "Cadastrar Biometria (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuarioId\": 2,\n  \"nomeUsuario\": \"Funcionario Teste\",\n  \"tipo\": \"FACIAL\",\n  \"dadosBiometricos\": \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/admin/biometria/cadastrar",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "admin", "biometria", "cadastrar"]
+						},
+						"description": "Admin cadastra biometria para funcionário - integração RH-Biometria"
+					}
+				},
+				{
+					"name": "Verificar Biometria (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/biometria/verificar/2",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "admin", "biometria", "verificar", "2"]
+						},
+						"description": "Admin verifica se funcionário tem biometria cadastrada"
+					}
+				}
 			],
-			"description": "Endpoints do módulo de RH - funcionários e controle de ponto"
+			"description": "Endpoints do módulo de RH - funcionários, controle de ponto e biometria"
 		},
 		{
 			"name": "📷 3. Biometria Module",

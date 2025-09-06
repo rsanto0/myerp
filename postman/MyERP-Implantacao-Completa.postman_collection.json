@@ -1,0 +1,748 @@
+{
+	"info": {
+		"name": "MyERP - Implantação Completa",
+		"description": "Collection completa para teste de implantação do ERP MyERP na empresa Tech Solutions Ltda",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "admin_token",
+			"value": ""
+		},
+		{
+			"key": "funcionario_token", 
+			"value": ""
+		},
+		{
+			"key": "empresa_id",
+			"value": ""
+		},
+		{
+			"key": "maria_id",
+			"value": ""
+		},
+		{
+			"key": "joao_id",
+			"value": ""
+		},
+		{
+			"key": "ana_id",
+			"value": ""
+		}
+	],
+	"item": [
+		{
+			"name": "FASE 1 - Verificação do Sistema",
+			"item": [
+				{
+					"name": "1.1 - Monitoring Dashboard",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/monitoring/dashboard",
+						"description": "Verificar se todos os 8 serviços estão UP"
+					}
+				},
+				{
+					"name": "1.2 - Status dos Serviços",
+					"request": {
+						"method": "GET", 
+						"url": "{{base_url}}/api/monitoring/services"
+					}
+				}
+			]
+		},
+		{
+			"name": "FASE 2 - Cadastro da Empresa",
+			"item": [
+				{
+					"name": "2.1 - Criar Empresa Tech Solutions",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/company/empresas",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"razaoSocial\": \"Tech Solutions Ltda\",\n  \"nomeFantasia\": \"TechSol\",\n  \"cnpj\": \"12345678000190\",\n  \"inscricaoEstadual\": \"123456789\",\n  \"email\": \"contato@techsol.com.br\",\n  \"telefone\": \"(11) 3333-4444\",\n  \"endereco\": {\n    \"logradouro\": \"Av. Paulista, 1000\",\n    \"numero\": \"1000\",\n    \"complemento\": \"Sala 501\",\n    \"bairro\": \"Bela Vista\",\n    \"cidade\": \"São Paulo\",\n    \"estado\": \"SP\",\n    \"cep\": \"01310-100\"\n  },\n  \"tipoPlano\": \"STANDARD\",\n  \"ativa\": true\n}"
+						},
+						"test": "pm.test('Empresa criada', function() {\n    pm.response.to.have.status(201);\n    const response = pm.response.json();\n    pm.collectionVariables.set('empresa_id', response.id);\n});"
+					}
+				},
+				{
+					"name": "2.2 - Configurar Conta Bancária",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/company/empresas/{{empresa_id}}/contas-bancarias",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"banco\": \"001\",\n  \"nomeBanco\": \"Banco do Brasil\",\n  \"agencia\": \"1234\",\n  \"conta\": \"56789-0\",\n  \"tipoConta\": \"CORRENTE\",\n  \"principal\": true\n}"
+						}
+					}
+				},
+				{
+					"name": "2.3 - Verificar Feature Flags",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/company/empresas/{{empresa_id}}/feature-flags"
+					}
+				}
+			]
+		},
+		{
+			"name": "FASE 3 - Configuração de Usuários",
+			"item": [
+				{
+					"name": "3.1 - Login Admin Padrão",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/auth/login",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"admin\",\n  \"senha\": \"admin123\"\n}"
+						},
+						"test": "pm.test('Login admin sucesso', function() {\n    pm.response.to.have.status(200);\n    const response = pm.response.json();\n    pm.collectionVariables.set('admin_token', response.token);\n});"
+					}
+				},
+				{
+					"name": "3.2 - Criar Admin da Empresa",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/auth/users",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"admin.techsol\",\n  \"senha\": \"TechSol@2024\",\n  \"nome\": \"Carlos Silva - Administrador\",\n  \"cpf\": \"12345678901\",\n  \"role\": \"ADMIN\"\n}"
+						}
+					}
+				},
+				{
+					"name": "3.3 - Criar Maria (RH)",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/auth/users",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"maria.rh\",\n  \"senha\": \"Maria@123\",\n  \"nome\": \"Maria Santos - RH\",\n  \"cpf\": \"98765432100\",\n  \"role\": \"FUNCIONARIO\"\n}"
+						}
+					}
+				},
+				{
+					"name": "3.4 - Criar João (Desenvolvedor)",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/auth/users",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"joao.dev\",\n  \"senha\": \"Joao@456\",\n  \"nome\": \"João Oliveira - Desenvolvedor\",\n  \"cpf\": \"11122233344\",\n  \"role\": \"FUNCIONARIO\"\n}"
+						}
+					}
+				},
+				{
+					"name": "3.5 - Criar Ana (Financeiro)",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/auth/users",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"ana.fin\",\n  \"senha\": \"Ana@789\",\n  \"nome\": \"Ana Costa - Financeiro\",\n  \"cpf\": \"55566677788\",\n  \"role\": \"FUNCIONARIO\"\n}"
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "FASE 4 - Gestão de RH",
+			"item": [
+				{
+					"name": "4.1 - Login Admin Empresa",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/auth/login",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"admin.techsol\",\n  \"senha\": \"TechSol@2024\"\n}"
+						},
+						"test": "pm.test('Login admin empresa', function() {\n    pm.response.to.have.status(200);\n    const response = pm.response.json();\n    pm.collectionVariables.set('admin_token', response.token);\n});"
+					}
+				},
+				{
+					"name": "4.2 - Cadastrar Maria no RH",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/admin/funcionarios",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Maria Santos\",\n  \"cpf\": \"98765432100\",\n  \"login\": \"maria.rh\",\n  \"senha\": \"Maria@123\",\n  \"role\": \"FUNCIONARIO\"\n}"
+						},
+						"test": "pm.test('Maria cadastrada', function() {\n    pm.response.to.have.status(201);\n    const response = pm.response.json();\n    pm.collectionVariables.set('maria_id', response.id);\n});"
+					}
+				},
+				{
+					"name": "4.3 - Cadastrar João no RH",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/admin/funcionarios",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Oliveira\",\n  \"cpf\": \"11122233344\",\n  \"login\": \"joao.dev\",\n  \"senha\": \"Joao@456\",\n  \"role\": \"FUNCIONARIO\"\n}"
+						},
+						"test": "pm.test('João cadastrado', function() {\n    pm.response.to.have.status(201);\n    const response = pm.response.json();\n    pm.collectionVariables.set('joao_id', response.id);\n});"
+					}
+				},
+				{
+					"name": "4.4 - Cadastrar Ana no RH",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/admin/funcionarios",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Ana Costa\",\n  \"cpf\": \"55566677788\",\n  \"login\": \"ana.fin\",\n  \"senha\": \"Ana@789\",\n  \"role\": \"FUNCIONARIO\"\n}"
+						},
+						"test": "pm.test('Ana cadastrada', function() {\n    pm.response.to.have.status(201);\n    const response = pm.response.json();\n    pm.collectionVariables.set('ana_id', response.id);\n});"
+					}
+				},
+				{
+					"name": "4.5 - Listar Funcionários",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/admin/funcionarios",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "4.6 - Login Maria",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/auth/login",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"maria.rh\",\n  \"senha\": \"Maria@123\"\n}"
+						},
+						"test": "pm.test('Login Maria', function() {\n    pm.response.to.have.status(200);\n    const response = pm.response.json();\n    pm.collectionVariables.set('funcionario_token', response.token);\n});"
+					}
+				},
+				{
+					"name": "4.7 - Maria Registra Entrada (08:00)",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/pontos/{{maria_id}}/registrar",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{funcionario_token}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "4.8 - Maria Registra Saída Almoço (12:00)",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/pontos/{{maria_id}}/registrar",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{funcionario_token}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "4.9 - Maria Registra Retorno Almoço (13:00)",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/pontos/{{maria_id}}/registrar",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{funcionario_token}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "4.10 - Maria Registra Saída (17:00)",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/pontos/{{maria_id}}/registrar",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{funcionario_token}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "4.11 - Ver Pontos da Maria",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/pontos/{{maria_id}}",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{funcionario_token}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "4.12 - Admin Ver Todos os Pontos",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/admin/pontos",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "FASE 5 - Biometria e Detecção",
+			"item": [
+				{
+					"name": "5.1 - Configurar Câmera Entrada",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/biometria/configuracao-camera",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nomeConfiguracao\": \"Câmera Entrada Principal\",\n  \"alias\": \"camera_entrada\",\n  \"tipoCamera\": \"USB\",\n  \"indiceUsb\": 0,\n  \"resolucao\": \"1280x720\",\n  \"fps\": 30,\n  \"ativa\": true\n}"
+						}
+					}
+				},
+				{
+					"name": "5.2 - Configurar Câmera Saída",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/biometria/configuracao-camera",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nomeConfiguracao\": \"Câmera Saída Principal\",\n  \"alias\": \"camera_saida\",\n  \"tipoCamera\": \"IP\",\n  \"enderecoIp\": \"192.168.1.100\",\n  \"porta\": 8080,\n  \"usuario\": \"admin\",\n  \"senha\": \"camera123\",\n  \"ativa\": true\n}"
+						}
+					}
+				},
+				{
+					"name": "5.3 - Cadastrar Maria na Biometria",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/biometria/usuarios",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Maria Santos\",\n  \"cpf\": \"98765432100\",\n  \"funcionarioId\": {{maria_id}},\n  \"ativo\": true\n}"
+						}
+					}
+				},
+				{
+					"name": "5.4 - Cadastrar João na Biometria",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/biometria/usuarios",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Oliveira\",\n  \"cpf\": \"11122233344\",\n  \"funcionarioId\": {{joao_id}},\n  \"ativo\": true\n}"
+						}
+					}
+				},
+				{
+					"name": "5.5 - Cadastrar Ana na Biometria",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/biometria/usuarios",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Ana Costa\",\n  \"cpf\": \"55566677788\",\n  \"funcionarioId\": {{ana_id}},\n  \"ativo\": true\n}"
+						}
+					}
+				},
+				{
+					"name": "5.6 - Simular Maria Entrada (08:05 - OK)",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/biometria/simular-deteccao?nomeFuncionario=Maria Santos&movimento=ENTRADA"
+					}
+				},
+				{
+					"name": "5.7 - Simular João Entrada (08:25 - Atrasado)",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/biometria/simular-deteccao?nomeFuncionario=João Oliveira&movimento=ENTRADA"
+					}
+				},
+				{
+					"name": "5.8 - Simular Ana Saída (17:10 - OK)",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/biometria/simular-deteccao?nomeFuncionario=Ana Costa&movimento=SAIDA"
+					}
+				},
+				{
+					"name": "5.9 - Listar Eventos Biométricos",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/biometria/eventos"
+					}
+				},
+				{
+					"name": "5.10 - Listar Eventos Pendentes",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/biometria/eventos/pendentes"
+					}
+				},
+				{
+					"name": "5.11 - Dashboard Biometria",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/biometria/dashboard"
+					}
+				}
+			]
+		},
+		{
+			"name": "FASE 6 - Gestão Financeira",
+			"item": [
+				{
+					"name": "6.1 - Configurar Dados Bancários",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/financial/configuracao-bancaria",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"banco\": \"001\",\n  \"agencia\": \"1234\",\n  \"conta\": \"56789-0\",\n  \"chavePix\": \"12345678000190\",\n  \"tipoChavePix\": \"CNPJ\"\n}"
+						}
+					}
+				},
+				{
+					"name": "6.2 - Gerar Boleto",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/financial/boletos",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"valor\": 1500.00,\n  \"dataVencimento\": \"2024-10-15\",\n  \"sacado\": {\n    \"nome\": \"Cliente Exemplo Ltda\",\n    \"cpfCnpj\": \"98765432000100\",\n    \"endereco\": \"Rua das Flores, 123\"\n  },\n  \"descricao\": \"Desenvolvimento de Sistema\"\n}"
+						}
+					}
+				},
+				{
+					"name": "6.3 - Gerar Cobrança PIX",
+					"request": {
+						"method": "POST",
+						"url": "{{base_url}}/api/financial/pix/cobranca",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"valor\": 750.00,\n  \"descricao\": \"Consultoria Técnica\",\n  \"pagador\": {\n    \"nome\": \"João Cliente\",\n    \"cpf\": \"12345678901\"\n  }\n}"
+						}
+					}
+				},
+				{
+					"name": "6.4 - Relatório Boletos",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/financial/relatorios/boletos?periodo=2024-09",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "6.5 - Relatório PIX",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/financial/relatorios/pix?periodo=2024-09",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "6.6 - Dashboard Financeiro",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/financial/dashboard",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "FASE 7 - Monitoramento Final",
+			"item": [
+				{
+					"name": "7.1 - Dashboard Geral",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/monitoring/dashboard"
+					}
+				},
+				{
+					"name": "7.2 - Status Serviços",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/monitoring/services"
+					}
+				},
+				{
+					"name": "7.3 - Métricas Sistema",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/monitoring/metrics"
+					}
+				},
+				{
+					"name": "7.4 - Health Check",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/monitoring/health"
+					}
+				}
+			]
+		},
+		{
+			"name": "FASE 8 - Validação Final",
+			"item": [
+				{
+					"name": "8.1 - Relatório Funcionários",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/admin/funcionarios",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "8.2 - Relatório Pontos",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/admin/pontos",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "8.3 - Relatório Eventos Biométricos",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/biometria/eventos"
+					}
+				},
+				{
+					"name": "8.4 - Status Final Sistema",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/monitoring/dashboard"
+					}
+				}
+			]
+		}
+	]
+}

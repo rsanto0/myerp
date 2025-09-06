@@ -1,0 +1,114 @@
+{
+	"info": {
+		"name": "Monitoring Module - Standalone",
+		"description": "Testes isolados do Monitoring Module",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "monitoring_base_url",
+			"value": "http://localhost:8084",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "📊 Dashboard",
+			"item": [
+				{
+					"name": "Dashboard Completo",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{monitoring_base_url}}/api/monitoring/dashboard",
+							"host": ["{{monitoring_base_url}}"],
+							"path": ["api", "monitoring", "dashboard"]
+						}
+					}
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{monitoring_base_url}}/api/monitoring/health",
+							"host": ["{{monitoring_base_url}}"],
+							"path": ["api", "monitoring", "health"]
+						}
+					}
+				},
+				{
+					"name": "Status dos Serviços",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{monitoring_base_url}}/api/monitoring/services",
+							"host": ["{{monitoring_base_url}}"],
+							"path": ["api", "monitoring", "services"]
+						}
+					}
+				},
+				{
+					"name": "Métricas do Sistema",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{monitoring_base_url}}/api/monitoring/metrics",
+							"host": ["{{monitoring_base_url}}"],
+							"path": ["api", "monitoring", "metrics"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔍 Actuator",
+			"item": [
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{monitoring_base_url}}/actuator/health",
+							"host": ["{{monitoring_base_url}}"],
+							"path": ["actuator", "health"]
+						}
+					}
+				},
+				{
+					"name": "Info",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{monitoring_base_url}}/actuator/info",
+							"host": ["{{monitoring_base_url}}"],
+							"path": ["actuator", "info"]
+						}
+					}
+				},
+				{
+					"name": "Metrics",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{monitoring_base_url}}/actuator/metrics",
+							"host": ["{{monitoring_base_url}}"],
+							"path": ["actuator", "metrics"]
+						}
+					}
+				},
+				{
+					"name": "Prometheus",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{monitoring_base_url}}/actuator/prometheus",
+							"host": ["{{monitoring_base_url}}"],
+							"path": ["actuator", "prometheus"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

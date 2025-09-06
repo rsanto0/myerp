@@ -6,6 +6,22 @@ spring:
     name: rh-service
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:local}
+  
+  # Configuração PostgreSQL
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/myerp_rh}
+    username: ${DATABASE_USERNAME:myerp_user}
+    password: ${DATABASE_PASSWORD:myerp_pass}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
 
 # Eureka Configuration
 eureka:

@@ -1,0 +1,394 @@
+{
+	"info": {
+		"name": "Biometria Module - Standalone",
+		"description": "Testes isolados do Biometria Module",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "biometria_base_url",
+			"value": "http://localhost:8083",
+			"type": "string"
+		},
+		{
+			"key": "config_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "usuario_id",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "📷 Configuração de Câmeras",
+			"item": [
+				{
+					"name": "Criar Config USB",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.configId) {",
+									"        pm.collectionVariables.set('config_id', response.configId);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nomeConfiguracao\": \"Camera USB Principal\",\n  \"alias\": \"camera_entrada\",\n  \"tipoCamera\": \"USB\",\n  \"marcaModelo\": \"Logitech C920\",\n  \"resolucao\": \"1920x1080\",\n  \"indiceUsb\": 0,\n  \"fps\": 30,\n  \"qualidadeJpeg\": 80\n}"
+						},
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/config/criar",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "config", "criar"]
+						}
+					}
+				},
+				{
+					"name": "Criar Config IP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nomeConfiguracao\": \"Camera IP Saída\",\n  \"alias\": \"camera_saida\",\n  \"tipoCamera\": \"IP\",\n  \"marcaModelo\": \"Hikvision DS-2CD2043G0-I\",\n  \"resolucao\": \"2688x1520\",\n  \"enderecoIp\": \"192.168.1.100\",\n  \"porta\": 554,\n  \"protocolo\": \"RTSP\",\n  \"usuario\": \"admin\",\n  \"senha\": \"123456\",\n  \"urlStream\": \"rtsp://192.168.1.100:554/stream1\"\n}"
+						},
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/config/criar",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "config", "criar"]
+						}
+					}
+				},
+				{
+					"name": "Listar Configurações",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/config/listar",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "config", "listar"]
+						}
+					}
+				},
+				{
+					"name": "Testar Configuração",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/config/testar/{{config_id}}",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "config", "testar", "{{config_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Ativar Configuração",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/config/ativar/{{config_id}}",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "config", "ativar", "{{config_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Config Ativa",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/config/ativa",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "config", "ativa"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔧 Gerenciamento de Câmeras",
+			"item": [
+				{
+					"name": "Atualizar Configuração",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"alias\": \"camera_entrada_principal\",\n  \"resolucao\": \"4K\",\n  \"fps\": 60,\n  \"qualidadeJpeg\": 90\n}"
+						},
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/manage/atualizar/{{config_id}}",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "manage", "atualizar", "{{config_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Buscar por Alias",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/manage/buscar-alias/camera_entrada",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "manage", "buscar-alias", "camera_entrada"]
+						}
+					}
+				},
+				{
+					"name": "Listar por Tipo",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/manage/listar-tipo/USB",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "manage", "listar-tipo", "USB"]
+						}
+					}
+				},
+				{
+					"name": "Remover Configuração",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/manage/remover/2",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "manage", "remover", "2"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🎥 Captura Biométrica",
+			"item": [
+				{
+					"name": "Testar Câmera",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/testar",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "testar"]
+						}
+					}
+				},
+				{
+					"name": "Capturar Foto",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/capturar-foto",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "capturar-foto"]
+						}
+					}
+				},
+				{
+					"name": "Captura com Detecção Facial",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/camera/capturar-facial?segundos=5",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "camera", "capturar-facial"],
+							"query": [
+								{
+									"key": "segundos",
+									"value": "5"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "👤 Biometria de Usuários",
+			"item": [
+				{
+					"name": "Registrar Biometria Facial",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuarioId\": {{usuario_id}},\n  \"tipoBiometria\": \"FACIAL\",\n  \"dadosBiometricos\": \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==\",\n  \"qualidade\": 85.5,\n  \"confianca\": 92.3,\n  \"algoritmo\": \"OpenCV-DNN\",\n  \"versaoAlgoritmo\": \"4.6.0\"\n}"
+						},
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/usuarios/registrar",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "usuarios", "registrar"]
+						}
+					}
+				},
+				{
+					"name": "Listar Biometrias do Usuário",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/usuarios/{{usuario_id}}/listar",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "usuarios", "{{usuario_id}}", "listar"]
+						}
+					}
+				},
+				{
+					"name": "Verificar Biometria",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuarioId\": {{usuario_id}},\n  \"tipoBiometria\": \"FACIAL\",\n  \"dadosBiometricos\": \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==\"\n}"
+						},
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/usuarios/verificar",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "usuarios", "verificar"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🤖 Simulação",
+			"item": [
+				{
+					"name": "Simular Detecção Entrada",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/simular-deteccao?nomeFuncionario=João Silva&movimento=ENTRADA",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "simular-deteccao"],
+							"query": [
+								{
+									"key": "nomeFuncionario",
+									"value": "João Silva"
+								},
+								{
+									"key": "movimento",
+									"value": "ENTRADA"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Simular Detecção Saída",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/simular-deteccao?nomeFuncionario=João Silva&movimento=SAIDA",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "simular-deteccao"],
+							"query": [
+								{
+									"key": "nomeFuncionario",
+									"value": "João Silva"
+								},
+								{
+									"key": "movimento",
+									"value": "SAIDA"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Listar Eventos",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/eventos",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "eventos"]
+						}
+					}
+				},
+				{
+					"name": "Eventos Pendentes",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/eventos/pendentes",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "eventos", "pendentes"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "📊 Dashboard",
+			"item": [
+				{
+					"name": "Dashboard",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{biometria_base_url}}/api/biometria/dashboard",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["api", "biometria", "dashboard"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔍 Health Check",
+			"item": [
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{biometria_base_url}}/actuator/health",
+							"host": ["{{biometria_base_url}}"],
+							"path": ["actuator", "health"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

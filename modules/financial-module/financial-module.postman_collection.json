@@ -1,0 +1,402 @@
+{
+	"info": {
+		"name": "Financial Module - Standalone",
+		"description": "Testes isolados do Financial Module - Boletos, PIX, Conciliação",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "financial_base_url",
+			"value": "http://localhost:8086",
+			"type": "string"
+		},
+		{
+			"key": "empresa_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "conta_bancaria_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "boleto_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "pix_id",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "💰 Boletos",
+			"item": [
+				{
+					"name": "Criar Boleto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.boleto && response.boleto.id) {",
+									"        pm.collectionVariables.set('boleto_id', response.boleto.id);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"empresaId\": {{empresa_id}},\n  \"contaBancariaId\": {{conta_bancaria_id}},\n  \"numeroDocumento\": \"DOC004\",\n  \"valor\": 350.00,\n  \"dataVencimento\": \"2024-03-15\",\n  \"sacadoNome\": \"Cliente Teste\",\n  \"sacadoDocumento\": \"12345678901\",\n  \"instrucoes\": \"Pagamento até o vencimento sem juros\"\n}"
+						},
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/boletos",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "boletos"]
+						}
+					}
+				},
+				{
+					"name": "Listar Boletos por Empresa",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/boletos/empresa/{{empresa_id}}",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "boletos", "empresa", "{{empresa_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Listar Boletos Pendentes",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/boletos/empresa/{{empresa_id}}/status/PENDENTE",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "boletos", "empresa", "{{empresa_id}}", "status", "PENDENTE"]
+						}
+					}
+				},
+				{
+					"name": "Listar Boletos Pagos",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/boletos/empresa/{{empresa_id}}/status/PAGO",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "boletos", "empresa", "{{empresa_id}}", "status", "PAGO"]
+						}
+					}
+				},
+				{
+					"name": "Buscar por Linha Digitável",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/boletos/linha-digitavel/34191.23456 78901.234567 89012.345678 1 23456789012345",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "boletos", "linha-digitavel", "34191.23456 78901.234567 89012.345678 1 23456789012345"]
+						}
+					}
+				},
+				{
+					"name": "Processar Pagamento",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/boletos/{{boleto_id}}/pagar?valorPago=150.00",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "boletos", "{{boleto_id}}", "pagar"],
+							"query": [
+								{
+									"key": "valorPago",
+									"value": "150.00"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Listar Boletos Vencidos",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/boletos/empresa/{{empresa_id}}/vencidos",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "boletos", "empresa", "{{empresa_id}}", "vencidos"]
+						}
+					}
+				},
+				{
+					"name": "Boletos por Período",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/boletos/empresa/{{empresa_id}}/periodo?inicio=2024-01-01&fim=2024-12-31",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "boletos", "empresa", "{{empresa_id}}", "periodo"],
+							"query": [
+								{
+									"key": "inicio",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "fim",
+									"value": "2024-12-31"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Estatísticas de Boletos",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/boletos/empresa/{{empresa_id}}/estatisticas",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "boletos", "empresa", "{{empresa_id}}", "estatisticas"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔄 PIX",
+			"item": [
+				{
+					"name": "Criar Transação PIX",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.transacao && response.transacao.id) {",
+									"        pm.collectionVariables.set('pix_id', response.transacao.id);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"empresaId\": {{empresa_id}},\n  \"contaBancariaId\": {{conta_bancaria_id}},\n  \"valor\": 125.50,\n  \"chavePix\": \"teste@email.com\",\n  \"descricao\": \"Pagamento de teste\",\n  \"pagadorNome\": \"Cliente PIX\",\n  \"pagadorDocumento\": \"98765432100\",\n  \"recebedorNome\": \"Empresa Teste\",\n  \"recebedorDocumento\": \"12345678000190\"\n}"
+						},
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix"]
+						}
+					}
+				},
+				{
+					"name": "Listar PIX por Empresa",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix/empresa/{{empresa_id}}",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix", "empresa", "{{empresa_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Listar PIX Pendentes",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix/empresa/{{empresa_id}}/status/PENDENTE",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix", "empresa", "{{empresa_id}}", "status", "PENDENTE"]
+						}
+					}
+				},
+				{
+					"name": "Listar PIX Aprovados",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix/empresa/{{empresa_id}}/status/APROVADO",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix", "empresa", "{{empresa_id}}", "status", "APROVADO"]
+						}
+					}
+				},
+				{
+					"name": "Buscar PIX por TxID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix/txid/TXN001234567890123456789",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix", "txid", "TXN001234567890123456789"]
+						}
+					}
+				},
+				{
+					"name": "Buscar PIX por EndToEndId",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix/end-to-end/E12345678901234567890123456789012",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix", "end-to-end", "E12345678901234567890123456789012"]
+						}
+					}
+				},
+				{
+					"name": "Processar Pagamento PIX",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix/{{pix_id}}/processar",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix", "{{pix_id}}", "processar"]
+						}
+					}
+				},
+				{
+					"name": "Cancelar PIX",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix/{{pix_id}}/cancelar?motivo=Solicitação do cliente",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix", "{{pix_id}}", "cancelar"],
+							"query": [
+								{
+									"key": "motivo",
+									"value": "Solicitação do cliente"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "PIX por Período",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix/empresa/{{empresa_id}}/periodo?inicio=2024-01-01T00:00:00&fim=2024-12-31T23:59:59",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix", "empresa", "{{empresa_id}}", "periodo"],
+							"query": [
+								{
+									"key": "inicio",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "fim",
+									"value": "2024-12-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "PIX por Chave",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix/chave/12345678901",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix", "chave", "12345678901"]
+						}
+					}
+				},
+				{
+					"name": "Estatísticas PIX",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/pix/empresa/{{empresa_id}}/estatisticas",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "pix", "empresa", "{{empresa_id}}", "estatisticas"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "📊 Dashboard Financeiro",
+			"item": [
+				{
+					"name": "Dashboard Completo",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/dashboard/empresa/{{empresa_id}}",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "dashboard", "empresa", "{{empresa_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Resumo Financeiro",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/api/financial/dashboard/empresa/{{empresa_id}}/resumo",
+							"host": ["{{financial_base_url}}"],
+							"path": ["api", "financial", "dashboard", "empresa", "{{empresa_id}}", "resumo"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔍 Health Check",
+			"item": [
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/actuator/health",
+							"host": ["{{financial_base_url}}"],
+							"path": ["actuator", "health"]
+						}
+					}
+				},
+				{
+					"name": "Info",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{financial_base_url}}/actuator/info",
+							"host": ["{{financial_base_url}}"],
+							"path": ["actuator", "info"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

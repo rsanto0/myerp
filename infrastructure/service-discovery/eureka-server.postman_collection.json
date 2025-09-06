@@ -1,0 +1,144 @@
+{
+	"info": {
+		"name": "Eureka Server - Standalone",
+		"description": "Testes isolados do Eureka Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "eureka_base_url",
+			"value": "http://localhost:8761",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "🔍 Service Discovery",
+			"item": [
+				{
+					"name": "Eureka Apps (JSON)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{eureka_base_url}}/eureka/apps",
+							"host": ["{{eureka_base_url}}"],
+							"path": ["eureka", "apps"]
+						}
+					}
+				},
+				{
+					"name": "Eureka Apps (XML)",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{eureka_base_url}}/eureka/apps",
+							"host": ["{{eureka_base_url}}"],
+							"path": ["eureka", "apps"]
+						}
+					}
+				},
+				{
+					"name": "Auth Service Instance",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{eureka_base_url}}/eureka/apps/AUTH-SERVICE",
+							"host": ["{{eureka_base_url}}"],
+							"path": ["eureka", "apps", "AUTH-SERVICE"]
+						}
+					}
+				},
+				{
+					"name": "RH Module Instance",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{eureka_base_url}}/eureka/apps/RH-SERVICE",
+							"host": ["{{eureka_base_url}}"],
+							"path": ["eureka", "apps", "RH-SERVICE"]
+						}
+					}
+				},
+				{
+					"name": "Biometria Module Instance",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{eureka_base_url}}/eureka/apps/BIOMETRIA-SERVICE",
+							"host": ["{{eureka_base_url}}"],
+							"path": ["eureka", "apps", "BIOMETRIA-SERVICE"]
+						}
+					}
+				},
+				{
+					"name": "Gateway Instance",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{eureka_base_url}}/eureka/apps/API-GATEWAY",
+							"host": ["{{eureka_base_url}}"],
+							"path": ["eureka", "apps", "API-GATEWAY"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔍 Health Check",
+			"item": [
+				{
+					"name": "Eureka Health",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{eureka_base_url}}/actuator/health",
+							"host": ["{{eureka_base_url}}"],
+							"path": ["actuator", "health"]
+						}
+					}
+				},
+				{
+					"name": "Eureka Info",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{eureka_base_url}}/actuator/info",
+							"host": ["{{eureka_base_url}}"],
+							"path": ["actuator", "info"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,50 @@
+# Configurações específicas do Financial Module
+
+server:
+  port: 8086
+
+spring:
+  application:
+    name: financial-service
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/myerp_financial
+    username: myerp_user
+    password: myerp_pass
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Configurações específicas do Financial
+financial:
+  boleto:
+    banco-padrao: ITAU
+    dias-vencimento: 30
+    multa-atraso: 2.0
+    juros-diario: 0.033
+  
+  pix:
+    timeout-segundos: 300
+    chave-padrao: empresa@myerp.com
+    qr-code-size: 256
+  
+  conciliacao:
+    auto-conciliar: true
+    tolerancia-centavos: 5
+    dias-historico: 90
+
+# Integração com Company Module
+company:
+  service:
+    url: http://localhost:8085
+    timeout: 5000
+    retry-attempts: 3
+
+logging:
+  level:
+    com.myerp.financial: DEBUG

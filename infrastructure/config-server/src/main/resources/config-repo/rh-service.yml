@@ -1,0 +1,49 @@
+# Configurações específicas do RH Module
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: rh-service
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/myerp_rh
+    username: myerp_user
+    password: myerp_pass
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Configurações de RH
+rh:
+  ponto:
+    horario-entrada: "08:00"
+    horario-saida: "17:00"
+    tolerancia-minutos: 15
+    registro-automatico: true
+  
+  funcionarios:
+    max-por-empresa: 1000
+    validar-cpf: true
+    gerar-matricula: true
+  
+  admin:
+    require-admin-role: true
+    log-admin-actions: true
+
+# Integração com Biometria Module
+biometria:
+  service:
+    url: http://localhost:8083
+    timeout: 5000
+    auto-register: true
+
+logging:
+  level:
+    com.myerp.rh: DEBUG

@@ -28,6 +28,9 @@ public class SystemHealthService {
     @Value("${services.eureka.host}:${services.eureka.port}")
     private String eurekaHost;
     
+    @Value("${services.config-server.host}:${services.config-server.port}")
+    private String configHost;
+    
     @Value("${services.api-gateway.host}:${services.api-gateway.port}")
     private String gatewayHost;
     
@@ -39,6 +42,12 @@ public class SystemHealthService {
     
     @Value("${services.biometria-module.host}:${services.biometria-module.port}")
     private String biometriaHost;
+    
+    @Value("${services.company-module.host}:${services.company-module.port}")
+    private String companyHost;
+    
+    @Value("${services.financial-module.host}:${services.financial-module.port}")
+    private String financialHost;
     
     public Map<String, Object> getSystemHealth() {
         Map<String, Object> health = new HashMap<>();
@@ -61,10 +70,13 @@ public class SystemHealthService {
         
         // Check each service with fallback endpoints
         services.put("eureka", checkServiceWithFallback("http://" + eurekaHost, "/actuator/health", "/"));
+        services.put("config-server", checkServiceWithFallback("http://" + configHost, "/actuator/health", "/application/default"));
         services.put("api-gateway", checkServiceWithFallback("http://" + gatewayHost, "/actuator/health", "/"));
         services.put("auth-service", checkServiceWithFallback("http://" + authHost, "/actuator/health", "/auth/health"));
         services.put("rh-module", checkServiceWithFallback("http://" + rhHost, "/actuator/health", "/api/health"));
         services.put("biometria-module", checkServiceWithFallback("http://" + biometriaHost, "/actuator/health", "/api/biometria/health"));
+        services.put("company-module", checkServiceWithFallback("http://" + companyHost, "/actuator/health", "/api/company/health"));
+        services.put("financial-module", checkServiceWithFallback("http://" + financialHost, "/actuator/health", "/api/financial/health"));
         
         return services;
     }

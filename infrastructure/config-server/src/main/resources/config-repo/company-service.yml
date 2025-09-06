@@ -1,0 +1,57 @@
+# Configurações específicas do Company Module
+
+server:
+  port: 8085
+
+spring:
+  application:
+    name: company-service
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/myerp_company
+    username: myerp_user
+    password: myerp_pass
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Configurações Multi-tenant
+company:
+  multi-tenant:
+    enabled: true
+    default-plan: BASIC
+    max-companies: 1000
+  
+  feature-flags:
+    biometria-facial: true
+    dashboard-avancado: true
+    relatorios-customizados: false
+    api-integracao: true
+  
+  maintenance:
+    groups:
+      A: 
+        max-downtime-percent: 33
+        priority: HIGH
+      B:
+        max-downtime-percent: 50
+        priority: MEDIUM
+      C:
+        max-downtime-percent: 100
+        priority: LOW
+
+# Configurações bancárias
+banking:
+  supported-banks: 15
+  default-environment: SANDBOX
+  api-timeout: 30000
+  certificate-validation: true
+
+logging:
+  level:
+    com.myerp.company: DEBUG

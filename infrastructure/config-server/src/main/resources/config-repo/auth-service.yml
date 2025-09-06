@@ -1,0 +1,46 @@
+# Configurações específicas do Auth Service
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/myerp_auth
+    username: myerp_user
+    password: myerp_pass
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Configurações JWT
+jwt:
+  secret: myerp-secret-key-2024
+  expiration: 86400000
+
+# Usuários padrão
+auth:
+  default-users:
+    admin:
+      login: admin
+      senha: admin123
+      nome: Administrador do Sistema
+      cpf: "00000000000"
+      role: ADMIN
+    funcionario:
+      login: funcionario
+      senha: "123456"
+      nome: Funcionário Exemplo
+      cpf: "11111111111"
+      role: FUNCIONARIO
+
+logging:
+  level:
+    com.myerp.auth: DEBUG

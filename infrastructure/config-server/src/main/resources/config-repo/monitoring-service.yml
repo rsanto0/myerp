@@ -1,0 +1,39 @@
+# Configurações específicas do Monitoring Module
+
+server:
+  port: 8084
+
+spring:
+  application:
+    name: monitoring-service
+
+# Configurações de Monitoramento
+monitoring:
+  services:
+    eureka-server: http://localhost:8761
+    config-server: http://localhost:8888
+    api-gateway: http://localhost:8080
+    auth-service: http://localhost:8081
+    rh-service: http://localhost:8082
+    biometria-service: http://localhost:8083
+    company-service: http://localhost:8085
+    financial-service: http://localhost:8086
+  
+  health-check:
+    interval-seconds: 30
+    timeout-seconds: 5
+    retry-attempts: 3
+  
+  dashboard:
+    refresh-interval: 10
+    show-details: true
+    enable-alerts: true
+  
+  metrics:
+    collect-jvm: true
+    collect-system: true
+    collect-custom: true
+
+logging:
+  level:
+    com.myerp.monitoring: DEBUG

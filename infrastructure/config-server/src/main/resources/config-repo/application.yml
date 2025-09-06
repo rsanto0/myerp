@@ -1,0 +1,52 @@
+# Configurações globais para todos os módulos MyERP
+
+# Eureka Client - Comum para todos
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Management - Comum para todos
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+# Logging - Padrão para todos
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    org.springframework.web: INFO
+    org.springframework.cloud: INFO
+
+# JWT - Configuração compartilhada
+jwt:
+  secret: myerp-secret-key-2024
+  expiration: 86400000
+
+# Database - Configurações padrão PostgreSQL
+spring:
+  datasource:
+    username: myerp_user
+    password: myerp_pass
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  flyway:
+    enabled: false
+    locations: classpath:db/migration

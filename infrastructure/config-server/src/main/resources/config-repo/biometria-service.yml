@@ -1,0 +1,54 @@
+# Configurações específicas do Biometria Module
+
+server:
+  port: 8083
+
+spring:
+  application:
+    name: biometria-service
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/myerp_biometria
+    username: myerp_user
+    password: myerp_pass
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Configurações de Biometria
+biometria:
+  camera:
+    default-resolution: "1920x1080"
+    default-fps: 30
+    jpeg-quality: 80
+    timeout-seconds: 10
+  
+  facial:
+    confidence-threshold: 0.85
+    quality-threshold: 0.75
+    algorithm: "OpenCV-DNN"
+    model-version: "4.6.0"
+  
+  digital:
+    template-format: "ISO"
+    quality-threshold: 0.80
+    minutiae-count: 12
+  
+  detection:
+    tolerance-minutes: 15
+    auto-register: true
+    notification-email: true
+    
+  simulation:
+    enabled: true
+    default-user: "João Silva"
+    movements: ["ENTRADA", "SAIDA"]
+
+logging:
+  level:
+    com.myerp.biometria: DEBUG

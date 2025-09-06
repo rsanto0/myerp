@@ -1,0 +1,460 @@
+{
+	"info": {
+		"name": "Company Module - Standalone",
+		"description": "Testes isolados do Company Module Multi-tenant",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "company_base_url",
+			"value": "http://localhost:8085",
+			"type": "string"
+		},
+		{
+			"key": "empresa_id",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "🏢 Empresas",
+			"item": [
+				{
+					"name": "Criar Empresa Básica",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.empresa && response.empresa.id) {",
+									"        pm.collectionVariables.set('empresa_id', response.empresa.id);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"razaoSocial\": \"Empresa Teste Ltda\",\n  \"nomeFantasia\": \"Empresa Teste\",\n  \"cnpj\": \"12.345.678/0001-99\",\n  \"endereco\": \"Rua Teste, 123\",\n  \"cidade\": \"São Paulo\",\n  \"estado\": \"SP\",\n  \"cep\": \"01234-567\",\n  \"telefone\": \"(11) 1234-5678\",\n  \"email\": \"contato@empresateste.com.br\",\n  \"tipoPlano\": \"BASIC\"\n}"
+						},
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas"]
+						}
+					}
+				},
+				{
+					"name": "Criar Empresa Premium",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"razaoSocial\": \"Tech Solutions S/A\",\n  \"nomeFantasia\": \"Tech Solutions\",\n  \"cnpj\": \"98.765.432/0001-88\",\n  \"endereco\": \"Av. Tecnologia, 1000\",\n  \"cidade\": \"São Paulo\",\n  \"estado\": \"SP\",\n  \"telefone\": \"(11) 9999-8888\",\n  \"email\": \"contato@techsolutions.com.br\",\n  \"tipoPlano\": \"PREMIUM\",\n  \"instanciaDedicada\": true\n}"
+						},
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas"]
+						}
+					}
+				},
+				{
+					"name": "Listar Empresas",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Empresa por ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Buscar por CNPJ",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/cnpj/12.345.678/0001-90",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "cnpj", "12.345.678", "0001-90"]
+						}
+					}
+				},
+				{
+					"name": "Listar por Plano",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/plano/PREMIUM",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "plano", "PREMIUM"]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Empresa",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"telefone\": \"(11) 5555-4444\",\n  \"email\": \"novo@empresateste.com.br\",\n  \"website\": \"https://www.empresateste.com.br\"\n}"
+						},
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Ativar Empresa",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}/ativar",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}", "ativar"]
+						}
+					}
+				},
+				{
+					"name": "Desativar Empresa",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}/desativar",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}", "desativar"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🚩 Feature Flags",
+			"item": [
+				{
+					"name": "Habilitar Biometria Facial",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}/features/BIOMETRIA_FACIAL/habilitar",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}", "features", "BIOMETRIA_FACIAL", "habilitar"]
+						}
+					}
+				},
+				{
+					"name": "Habilitar Dashboard Avançado",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}/features/DASHBOARD_AVANCADO/habilitar",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}", "features", "DASHBOARD_AVANCADO", "habilitar"]
+						}
+					}
+				},
+				{
+					"name": "Verificar Feature",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}/features/BIOMETRIA_FACIAL",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}", "features", "BIOMETRIA_FACIAL"]
+						}
+					}
+				},
+				{
+					"name": "Desabilitar Feature",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}/features/DASHBOARD_AVANCADO/desabilitar",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}", "features", "DASHBOARD_AVANCADO", "desabilitar"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "⚙️ Configurações",
+			"item": [
+				{
+					"name": "Adicionar Configuração",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"chave\": \"HORARIO_FUNCIONAMENTO\",\n  \"valor\": \"08:00-18:00\"\n}"
+						},
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}/configuracoes",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}", "configuracoes"]
+						}
+					}
+				},
+				{
+					"name": "Configurar Tolerância Ponto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"chave\": \"TOLERANCIA_PONTO\",\n  \"valor\": \"15\"\n}"
+						},
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}/configuracoes",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}", "configuracoes"]
+						}
+					}
+				},
+				{
+					"name": "Configurar Email Notificações",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"chave\": \"EMAIL_NOTIFICACOES\",\n  \"valor\": \"admin@empresateste.com.br\"\n}"
+						},
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/{{empresa_id}}/configuracoes",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "{{empresa_id}}", "configuracoes"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "📊 Estatísticas",
+			"item": [
+				{
+					"name": "Estatísticas Gerais",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/estatisticas",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "estatisticas"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🏢 Dados de Exemplo",
+			"item": [
+				{
+					"name": "Padaria do João",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/1",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "1"]
+						}
+					}
+				},
+				{
+					"name": "Oficina do Pedro",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/2",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "2"]
+						}
+					}
+				},
+				{
+					"name": "Consultoria da Ana",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/empresas/3",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "empresas", "3"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔍 Health Check",
+			"item": [
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/actuator/health",
+							"host": ["{{company_base_url}}"],
+							"path": ["actuator", "health"]
+						}
+					}
+				},
+				{
+					"name": "Info",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/actuator/info",
+							"host": ["{{company_base_url}}"],
+							"path": ["actuator", "info"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🏦 Contas Bancárias",
+			"item": [
+				{
+					"name": "Criar Conta Bancária",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"empresaId\": {{empresa_id}},\n  \"nomeConta\": \"Conta Principal\",\n  \"banco\": \"ITAU\",\n  \"agencia\": \"1234\",\n  \"conta\": \"56789\",\n  \"digitoVerificador\": \"0\",\n  \"tipoConta\": \"CORRENTE\",\n  \"titular\": \"Empresa Teste Ltda\",\n  \"ativaBoletos\": true,\n  \"ativaPix\": true,\n  \"contaPrincipal\": true,\n  \"ambiente\": \"SANDBOX\"\n}"
+						},
+						"url": {
+							"raw": "{{company_base_url}}/api/company/contas-bancarias",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "contas-bancarias"]
+						}
+					}
+				},
+				{
+					"name": "Listar Contas por Empresa",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/contas-bancarias/empresa/{{empresa_id}}",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "contas-bancarias", "empresa", "{{empresa_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Conta Principal",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/contas-bancarias/empresa/{{empresa_id}}/principal",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "contas-bancarias", "empresa", "{{empresa_id}}", "principal"]
+						}
+					}
+				},
+				{
+					"name": "Listar Contas com Boletos",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/contas-bancarias/empresa/{{empresa_id}}/boletos",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "contas-bancarias", "empresa", "{{empresa_id}}", "boletos"]
+						}
+					}
+				},
+				{
+					"name": "Listar Contas com PIX",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/contas-bancarias/empresa/{{empresa_id}}/pix",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "contas-bancarias", "empresa", "{{empresa_id}}", "pix"]
+						}
+					}
+				},
+				{
+					"name": "Listar Bancos Disponíveis",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/contas-bancarias/bancos-disponiveis",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "contas-bancarias", "bancos-disponiveis"]
+						}
+					}
+				},
+				{
+					"name": "Listar Tipos de Conta",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{company_base_url}}/api/company/contas-bancarias/tipos-conta",
+							"host": ["{{company_base_url}}"],
+							"path": ["api", "company", "contas-bancarias", "tipos-conta"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

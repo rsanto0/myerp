@@ -1,0 +1,66 @@
+# Configurações específicas do API Gateway
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  
+  cloud:
+    gateway:
+      routes:
+        # Auth Service (Público)
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=0
+        
+        # RH Module (Protegido)
+        - id: rh-service
+          uri: lb://rh-service
+          predicates:
+            - Path=/api/**
+          filters:
+            - name: JwtAuthFilter
+            - StripPrefix=1
+        
+        # Biometria Module (Protegido)
+        - id: biometria-service
+          uri: lb://biometria-service
+          predicates:
+            - Path=/biometria/**
+          filters:
+            - name: JwtAuthFilter
+            - StripPrefix=1
+        
+        # Company Module (Protegido)
+        - id: company-service
+          uri: lb://company-service
+          predicates:
+            - Path=/company/**
+          filters:
+            - name: JwtAuthFilter
+            - StripPrefix=1
+        
+        # Financial Module (Protegido)
+        - id: financial-service
+          uri: lb://financial-service
+          predicates:
+            - Path=/financial/**
+          filters:
+            - name: JwtAuthFilter
+            - StripPrefix=1
+
+# Configurações específicas do Gateway
+gateway:
+  auth:
+    service-url: http://localhost:8081
+    timeout: 5000
+    
+logging:
+  level:
+    com.myerp.gateway: DEBUG
+    org.springframework.cloud.gateway: DEBUG

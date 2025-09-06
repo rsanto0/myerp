@@ -1,36 +1,36 @@
 -- Script de inicialização do banco MyERP
 -- Cria databases separados para cada módulo
 
--- Database para Auth Service
-CREATE DATABASE auth_db;
+-- Databases para todos os módulos MyERP
+CREATE DATABASE myerp_auth;
+CREATE DATABASE myerp_rh;
+CREATE DATABASE myerp_biometria;
+CREATE DATABASE myerp_company;
+CREATE DATABASE myerp_financial;
+CREATE DATABASE myerp_monitoring;
 
--- Database para RH Module (Sistema Ponto)
-CREATE DATABASE rh_db;
-
--- Database para Biometria Module
-CREATE DATABASE biometria_db;
-
--- Database para outros módulos futuros
-CREATE DATABASE financeiro_db;
-CREATE DATABASE vendas_db;
-CREATE DATABASE estoque_db;
-CREATE DATABASE compras_db;
+-- Databases para módulos futuros
+CREATE DATABASE myerp_vendas;
+CREATE DATABASE myerp_estoque;
+CREATE DATABASE myerp_compras;
 
 -- Criar usuário específico para cada serviço (opcional)
 CREATE USER auth_user WITH PASSWORD 'auth_pass';
 CREATE USER rh_user WITH PASSWORD 'rh_pass';
 CREATE USER biometria_user WITH PASSWORD 'biometria_pass';
 
--- Conceder permissões
-GRANT ALL PRIVILEGES ON DATABASE auth_db TO auth_user;
-GRANT ALL PRIVILEGES ON DATABASE rh_db TO rh_user;
-GRANT ALL PRIVILEGES ON DATABASE biometria_db TO biometria_user;
+-- Conceder permissões ao usuário principal
+GRANT ALL PRIVILEGES ON DATABASE myerp_auth TO myerp_user;
+GRANT ALL PRIVILEGES ON DATABASE myerp_rh TO myerp_user;
+GRANT ALL PRIVILEGES ON DATABASE myerp_biometria TO myerp_user;
+GRANT ALL PRIVILEGES ON DATABASE myerp_company TO myerp_user;
+GRANT ALL PRIVILEGES ON DATABASE myerp_financial TO myerp_user;
+GRANT ALL PRIVILEGES ON DATABASE myerp_monitoring TO myerp_user;
+GRANT ALL PRIVILEGES ON DATABASE myerp_vendas TO myerp_user;
+GRANT ALL PRIVILEGES ON DATABASE myerp_estoque TO myerp_user;
+GRANT ALL PRIVILEGES ON DATABASE myerp_compras TO myerp_user;
 
--- Conceder permissões ao usuário principal também
-GRANT ALL PRIVILEGES ON DATABASE auth_db TO myerp_user;
-GRANT ALL PRIVILEGES ON DATABASE rh_db TO myerp_user;
-GRANT ALL PRIVILEGES ON DATABASE biometria_db TO myerp_user;
-GRANT ALL PRIVILEGES ON DATABASE financeiro_db TO myerp_user;
-GRANT ALL PRIVILEGES ON DATABASE vendas_db TO myerp_user;
-GRANT ALL PRIVILEGES ON DATABASE estoque_db TO myerp_user;
-GRANT ALL PRIVILEGES ON DATABASE compras_db TO myerp_user;
+-- Conceder permissões aos usuários específicos
+GRANT ALL PRIVILEGES ON DATABASE myerp_auth TO auth_user;
+GRANT ALL PRIVILEGES ON DATABASE myerp_rh TO rh_user;
+GRANT ALL PRIVILEGES ON DATABASE myerp_biometria TO biometria_user;
