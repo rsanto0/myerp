@@ -39,7 +39,7 @@ public class DeteccaoService {
         LocalTime horaDeteccao = evento.getDataHoraDeteccao().toLocalTime();
         TipoMovimento tipo = evento.getTipoMovimento();
         
-        System.out.println("🕰️ Verificando tolerância: " + tipo + " às " + horaDeteccao);
+        System.out.println("[BIOMETRIA] 🕰️ Verificando tolerância: " + tipo + " às " + horaDeteccao);
         
         boolean dentroTolerancia = false;
         
@@ -48,22 +48,22 @@ public class DeteccaoService {
             case ENTRADA:
                 dentroTolerancia = !horaDeteccao.isBefore(LocalTime.of(7, 45)) && 
                                   !horaDeteccao.isAfter(LocalTime.of(8, 15));
-                System.out.println("🕰️ ENTRADA: 07:45-08:15, Atual: " + horaDeteccao + ", Dentro: " + dentroTolerancia);
+                System.out.println("[BIOMETRIA] 🕰️ ENTRADA: 07:45-08:15, Atual: " + horaDeteccao + ", Dentro: " + dentroTolerancia);
                 break;
             case SAIDA_ALMOCO:
                 dentroTolerancia = !horaDeteccao.isBefore(LocalTime.of(11, 45)) && 
                                   !horaDeteccao.isAfter(LocalTime.of(12, 15));
-                System.out.println("🕰️ SAIDA_ALMOCO: 11:45-12:15, Atual: " + horaDeteccao + ", Dentro: " + dentroTolerancia);
+                System.out.println("[BIOMETRIA] 🕰️ SAIDA_ALMOCO: 11:45-12:15, Atual: " + horaDeteccao + ", Dentro: " + dentroTolerancia);
                 break;
             case RETORNO_ALMOCO:
                 dentroTolerancia = !horaDeteccao.isBefore(LocalTime.of(12, 45)) && 
                                   !horaDeteccao.isAfter(LocalTime.of(13, 15));
-                System.out.println("🕰️ RETORNO_ALMOCO: 12:45-13:15, Atual: " + horaDeteccao + ", Dentro: " + dentroTolerancia);
+                System.out.println("[BIOMETRIA] 🕰️ RETORNO_ALMOCO: 12:45-13:15, Atual: " + horaDeteccao + ", Dentro: " + dentroTolerancia);
                 break;
             case SAIDA:
                 dentroTolerancia = !horaDeteccao.isBefore(LocalTime.of(16, 45)) && 
                                   !horaDeteccao.isAfter(LocalTime.of(17, 15));
-                System.out.println("🕰️ SAIDA: 16:45-17:15, Atual: " + horaDeteccao + ", Dentro: " + dentroTolerancia);
+                System.out.println("[BIOMETRIA] 🕰️ SAIDA: 16:45-17:15, Atual: " + horaDeteccao + ", Dentro: " + dentroTolerancia);
                 break;
             default:
                 dentroTolerancia = false;
@@ -73,7 +73,7 @@ public class DeteccaoService {
     }
     
     private void registrarPontoAutomatico(EventoDeteccao evento) {
-        System.out.println("🔄 Tentando registrar ponto automático: " + evento.getNomeFuncionario() + " - " + evento.getTipoMovimento());
+        System.out.println("[BIOMETRIA] 🔄 Tentando registrar ponto automático: " + evento.getNomeFuncionario() + " - " + evento.getTipoMovimento());
         
         try {
             // Chama o módulo RH para registrar o ponto
@@ -87,10 +87,10 @@ public class DeteccaoService {
             
             eventoRepository.save(evento);
             
-            System.out.println("✅ Ponto registrado automaticamente: " + evento.getNomeFuncionario());
+            System.out.println("[BIOMETRIA] ✅ Ponto registrado automaticamente: " + evento.getNomeFuncionario());
             
         } catch (Exception e) {
-            System.err.println("❌ Erro ao registrar ponto automático: " + e.getMessage());
+            System.err.println("[BIOMETRIA] ❌ Erro ao registrar ponto automático: " + e.getMessage());
             e.printStackTrace();
             criarSugestaoParaRh(evento);
         }
@@ -104,7 +104,7 @@ public class DeteccaoService {
         // Notifica RH
         notificacaoService.notificarRhSugestaoPonto(evento);
         
-        System.out.println("⏰ Sugestão criada para RH: " + evento.getNomeFuncionario() + 
+        System.out.println("[BIOMETRIA] ⏰ Sugestão criada para RH: " + evento.getNomeFuncionario() + 
                           " - " + evento.getTipoMovimento());
     }
     

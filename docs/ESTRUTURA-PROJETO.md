@@ -21,7 +21,7 @@ myErp/
 │
 ├── 🔗 shared/                 # Bibliotecas compartilhadas
 │   ├── common-lib/           # DTOs e utilitários
-│   └── security-lib/         # Configurações de segurança
+
 │
 ├── ☁️ aws/                    # Deploy AWS
 │   ├── cloudformation-*.yml  # Templates infraestrutura
@@ -71,7 +71,7 @@ myErp/
 ### **🔗 Shared (Compartilhado)**
 **Analogia: Recursos comuns**
 - **common-lib** - Biblioteca comum
-- **security-lib** - Políticas de segurança
+
 
 ### **☁️ AWS (Deploy Cloud)**
 **Analogia: Mudança para prédio comercial**

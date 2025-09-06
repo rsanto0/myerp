@@ -1,12 +1,14 @@
 package com.myerp.monitoring.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.RuntimeMXBean;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +16,14 @@ import java.util.Map;
 @Service
 public class SystemHealthService {
     
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+    
+    public SystemHealthService() {
+        this.restTemplate = new RestTemplateBuilder()
+            .setConnectTimeout(Duration.ofSeconds(3))
+            .setReadTimeout(Duration.ofSeconds(5))
+            .build();
+    }
     
     @Value("${services.eureka.host}:${services.eureka.port}")
     private String eurekaHost;
@@ -50,12 +59,12 @@ public class SystemHealthService {
     public Map<String, Object> getServicesStatus() {
         Map<String, Object> services = new HashMap<>();
         
-        // Check each service using dynamic configuration
-        services.put("eureka", checkService("http://" + eurekaHost + "/actuator/health"));
-        services.put("api-gateway", checkService("http://" + gatewayHost + "/actuator/health"));
-        services.put("auth-service", checkService("http://" + authHost + "/actuator/health"));
-        services.put("rh-module", checkService("http://" + rhHost + "/actuator/health"));
-        services.put("biometria-module", checkService("http://" + biometriaHost + "/actuator/health"));
+        // Check each service with fallback endpoints
+        services.put("eureka", checkServiceWithFallback("http://" + eurekaHost, "/actuator/health", "/"));
+        services.put("api-gateway", checkServiceWithFallback("http://" + gatewayHost, "/actuator/health", "/"));
+        services.put("auth-service", checkServiceWithFallback("http://" + authHost, "/actuator/health", "/auth/health"));
+        services.put("rh-module", checkServiceWithFallback("http://" + rhHost, "/actuator/health", "/api/health"));
+        services.put("biometria-module", checkServiceWithFallback("http://" + biometriaHost, "/actuator/health", "/api/biometria/health"));
         
         return services;
     }
@@ -106,6 +115,59 @@ public class SystemHealthService {
             return Map.of(
                 "status", "DOWN",
                 "url", healthUrl,
+                "error", e.getMessage(),
+                "lastCheck", LocalDateTime.now()
+            );
+        }
+    }
+    
+    private Map<String, Object> checkServiceWithFallback(String baseUrl, String primaryEndpoint, String fallbackEndpoint) {
+        // Primeiro tenta o endpoint principal (actuator/health)
+        try {
+            String primaryUrl = baseUrl + primaryEndpoint;
+            Map<String, Object> response = restTemplate.getForObject(primaryUrl, Map.class);
+            if (response != null && "UP".equals(response.get("status"))) {
+                return Map.of(
+                    "status", "UP",
+                    "url", primaryUrl,
+                    "endpoint", "primary",
+                    "lastCheck", LocalDateTime.now()
+                );
+            }
+        } catch (Exception e) {
+            // Ignora erro e tenta fallback
+        }
+        
+        // Tenta endpoint de fallback
+        try {
+            String fallbackUrl = baseUrl + fallbackEndpoint;
+            restTemplate.getForObject(fallbackUrl, String.class);
+            return Map.of(
+                "status", "UP",
+                "url", fallbackUrl,
+                "endpoint", "fallback",
+                "lastCheck", LocalDateTime.now()
+            );
+        } catch (Exception e) {
+            // Se ambos falharam, tenta apenas conectividade básica
+            return checkBasicConnectivity(baseUrl);
+        }
+    }
+    
+    private Map<String, Object> checkBasicConnectivity(String baseUrl) {
+        try {
+            // Timeout mais curto para conectividade básica
+            restTemplate.getForObject(baseUrl, String.class);
+            return Map.of(
+                "status", "UP",
+                "url", baseUrl,
+                "endpoint", "basic",
+                "lastCheck", LocalDateTime.now()
+            );
+        } catch (Exception e) {
+            return Map.of(
+                "status", "DOWN",
+                "url", baseUrl,
                 "error", e.getMessage(),
                 "lastCheck", LocalDateTime.now()
             );

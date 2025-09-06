@@ -125,10 +125,14 @@ aws sts get-caller-identity --query Account --output text
 ### **P: Como deletar tudo?**
 **R:**
 ```bash
-# Deletar na ordem inversa
-aws cloudformation delete-stack --stack-name myerp-ecs-prod
-aws cloudformation delete-stack --stack-name myerp-dns-prod  
-aws cloudformation delete-stack --stack-name myerp-infrastructure-prod
+# Rollback automatizado
+rollback-complete.bat prod us-east-1
+
+# Ou rollback total (todos os ambientes)
+rollback-total.bat us-east-1
+
+# Verificar custos antes
+check-costs.bat us-east-1
 ```
 
 ## 🚨 **Troubleshooting**
