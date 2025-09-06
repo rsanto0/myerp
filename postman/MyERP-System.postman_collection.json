@@ -148,8 +148,16 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{jwt_token_funcionario}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tipo\": \"ENTRADA\"\n}"
+						},
 						"url": {
 							"raw": "http://localhost:8080/api/pontos/{{funcionario_id}}/registrar",
 							"protocol": "http",
@@ -225,7 +233,7 @@
 							"port": "8080",
 							"path": ["api", "admin", "funcionarios"]
 						},
-						"description": "Admin cria novo funcionário"
+						"description": "Admin cria novo funcionário - sincroniza com Auth Service"
 					}
 				},
 				{
@@ -311,6 +319,57 @@
 				}
 			],
 			"description": "Endpoints do módulo de biometria - reconhecimento facial e automação"
+		},
+		{
+			"name": "📊 4. Monitoring Module",
+			"item": [
+				{
+					"name": "Dashboard Geral",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8084/api/monitoring/dashboard",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
+							"path": ["api", "monitoring", "dashboard"]
+						},
+						"description": "Dashboard consolidado com status de todos os serviços"
+					}
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8084/api/monitoring/health",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
+							"path": ["api", "monitoring", "health"]
+						},
+						"description": "Status de saúde do sistema de monitoramento"
+					}
+				},
+				{
+					"name": "Status dos Serviços",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8084/api/monitoring/services",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
+							"path": ["api", "monitoring", "services"]
+						},
+						"description": "Status individual de cada microserviço"
+					}
+				}
+			],
+			"description": "Endpoints do módulo de monitoramento - dashboard e métricas"
 		}
 	],
 	"variable": [
