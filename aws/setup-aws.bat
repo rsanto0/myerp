@@ -43,6 +43,12 @@ echo [PASSO 4] Obtendo ID da conta...
 for /f "tokens=*" %%i in ('aws sts get-caller-identity --query Account --output text') do set AWS_ACCOUNT_ID=%%i
 
 echo.
+echo [PASSO 5] Criando flag de setup completo...
+echo # Setup completed on %date% %time% > .setup-complete
+echo AWS_REGION=%AWS_REGION% >> .setup-complete
+echo AWS_ACCOUNT_ID=%AWS_ACCOUNT_ID% >> .setup-complete
+
+echo.
 echo ========================================
 echo    CONFIGURACAO CONCLUIDA!
 echo ========================================
@@ -54,8 +60,15 @@ echo.
 echo IMPORTANTE: Anote seu ID da conta!
 echo.
 echo Proximo passo:
-echo 1. set AWS_ACCOUNT_ID=%AWS_ACCOUNT_ID%
-echo 2. cd aws
-echo 3. deploy-aws.bat prod %AWS_REGION% myerp.com
+echo.
+echo OPCAO 1 - Usar orquestrador (recomendado):
+echo   aws-manager.bat deploy prod %AWS_REGION% myerp.com
+echo.
+echo OPCAO 2 - Usar scripts individuais:
+echo   1. set AWS_ACCOUNT_ID=%AWS_ACCOUNT_ID%
+echo   2. deploy-aws.bat prod %AWS_REGION% myerp.com
+echo.
+echo OPCAO 3 - Deploy completo (setup + deploy):
+echo   aws-manager.bat full-deploy prod %AWS_REGION% myerp.com
 echo.
 pause

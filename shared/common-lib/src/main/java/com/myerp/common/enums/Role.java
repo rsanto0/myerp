@@ -7,5 +7,7 @@ public enum Role {
     /** Usuário padrão com acesso limitado */
     FUNCIONARIO,
     /** Administrador com acesso total */
-    ADMIN
+    ADMIN,
+    /** Super usuário com poderes máximos */
+    MASTER
 }

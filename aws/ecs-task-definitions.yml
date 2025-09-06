@@ -108,6 +108,36 @@ Resources:
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: ecs
 
+  # Config Server Task Definition
+  ConfigTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub 'myerp-config-${Environment}'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 512
+      Memory: 1024
+      ExecutionRoleArn: !Ref TaskExecutionRole
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: config
+          Image: !Sub '${ECRRepository}/myerp/config:${Environment}'
+          PortMappings:
+            - ContainerPort: 8888
+              Protocol: tcp
+          Environment:
+            - Name: SPRING_PROFILES_ACTIVE
+              Value: aws
+            - Name: ENVIRONMENT
+              Value: !Ref Environment
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Sub '/aws/ecs/myerp-config-${Environment}'
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+
   # Auth Service Task Definition
   AuthTaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -142,6 +172,114 @@ Resources:
             LogDriver: awslogs
             Options:
               awslogs-group: !Sub '/aws/ecs/myerp-auth-${Environment}'
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+
+  # RH Module Task Definition
+  RhTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub 'myerp-rh-${Environment}'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 512
+      Memory: 1024
+      ExecutionRoleArn: !Ref TaskExecutionRole
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: rh
+          Image: !Sub '${ECRRepository}/myerp/rh:${Environment}'
+          PortMappings:
+            - ContainerPort: 8082
+              Protocol: tcp
+          Environment:
+            - Name: SPRING_PROFILES_ACTIVE
+              Value: aws
+            - Name: ENVIRONMENT
+              Value: !Ref Environment
+          Secrets:
+            - Name: RDS_USERNAME
+              ValueFrom: !Sub '/myerp/${Environment}/database/credentials:username'
+            - Name: RDS_PASSWORD
+              ValueFrom: !Sub '/myerp/${Environment}/database/credentials:password'
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Sub '/aws/ecs/myerp-rh-${Environment}'
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+
+  # Biometria Module Task Definition
+  BiometriaTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub 'myerp-biometria-${Environment}'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 512
+      Memory: 1024
+      ExecutionRoleArn: !Ref TaskExecutionRole
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: biometria
+          Image: !Sub '${ECRRepository}/myerp/biometria:${Environment}'
+          PortMappings:
+            - ContainerPort: 8083
+              Protocol: tcp
+          Environment:
+            - Name: SPRING_PROFILES_ACTIVE
+              Value: aws
+            - Name: ENVIRONMENT
+              Value: !Ref Environment
+            - Name: SMTP_USERNAME
+              Value: !Sub '{{resolve:ssm:/myerp/${Environment}/notification/smtp/username}}'
+            - Name: TWILIO_ACCOUNT_SID
+              Value: !Sub '{{resolve:ssm:/myerp/${Environment}/notification/twilio/account-sid}}'
+          Secrets:
+            - Name: RDS_USERNAME
+              ValueFrom: !Sub '/myerp/${Environment}/database/credentials:username'
+            - Name: RDS_PASSWORD
+              ValueFrom: !Sub '/myerp/${Environment}/database/credentials:password'
+            - Name: SMTP_PASSWORD
+              ValueFrom: !Sub '/myerp/${Environment}/notification/smtp/password'
+            - Name: TWILIO_AUTH_TOKEN
+              ValueFrom: !Sub '/myerp/${Environment}/notification/twilio/auth-token'
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Sub '/aws/ecs/myerp-biometria-${Environment}'
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+
+  # Monitoring Module Task Definition
+  MonitoringTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub 'myerp-monitoring-${Environment}'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 512
+      Memory: 1024
+      ExecutionRoleArn: !Ref TaskExecutionRole
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: monitoring
+          Image: !Sub '${ECRRepository}/myerp/monitoring:${Environment}'
+          PortMappings:
+            - ContainerPort: 8084
+              Protocol: tcp
+          Environment:
+            - Name: SPRING_PROFILES_ACTIVE
+              Value: aws
+            - Name: ENVIRONMENT
+              Value: !Ref Environment
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Sub '/aws/ecs/myerp-monitoring-${Environment}'
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: ecs
 
@@ -182,6 +320,12 @@ Resources:
       LogGroupName: !Sub '/aws/ecs/myerp-eureka-${Environment}'
       RetentionInDays: 7
 
+  ConfigLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/ecs/myerp-config-${Environment}'
+      RetentionInDays: 7
+
   AuthLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -192,6 +336,24 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub '/aws/ecs/myerp-gateway-${Environment}'
+      RetentionInDays: 7
+
+  RhLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/ecs/myerp-rh-${Environment}'
+      RetentionInDays: 7
+
+  BiometriaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/ecs/myerp-biometria-${Environment}'
+      RetentionInDays: 7
+
+  MonitoringLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/ecs/myerp-monitoring-${Environment}'
       RetentionInDays: 7
 
 Outputs:

@@ -38,11 +38,13 @@ deploy-aws.bat prod us-east-1 myerp.com
 myErp/
 ├── 🏗️ infrastructure/     # Serviços base (Gateway, Auth, Eureka)
 ├── 📦 modules/           # Módulos de negócio (RH, Biometria, etc)
+├── 🔗 shared/            # Bibliotecas compartilhadas
+│   ├── common-lib/       # DTOs e entidades comuns
+│   └── notification-lib/ # Email, SMS, WhatsApp
 ├── ☁️ aws/              # Deploy AWS (CloudFormation, Scripts)
 ├── 📚 docs/             # Documentação completa
 ├── 🚀 dev-scripts/      # Scripts de desenvolvimento
-├── 📡 postman/          # Collections API
-└── 🔗 shared/           # Bibliotecas compartilhadas
+└── 📡 postman/          # Collections API
 ```
 
 ## 🎯 **Módulos Implementados**
@@ -162,6 +164,7 @@ Veja [Cenários Completos](docs/CENARIOS-TESTE-COMPLETO.md)
 - Autenticação e autorização
 - Módulos RH e Biometria
 - Dashboard de monitoramento
+- **Notification Library** (Email, SMS, WhatsApp)
 - Deploy AWS completo
 
 ### **🔄 Em Desenvolvimento**

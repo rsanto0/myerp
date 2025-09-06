@@ -10,6 +10,47 @@
 			"name": "🔐 1. Auth Service",
 			"item": [
 				{
+					"name": "Login Master",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('jwt_token_master', response.token);",
+									"    pm.environment.set('master_id', response.userId);",
+									"    pm.environment.set('master_role', response.role);",
+									"    console.log('Token MASTER salvo:', response.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"master\",\n  \"senha\": \"master123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["auth", "login"]
+						},
+						"description": "Login do MASTER - salva token automaticamente"
+					}
+				},
+				{
 					"name": "Login Admin",
 					"event": [
 						{
@@ -234,6 +275,34 @@
 							"path": ["api", "admin", "funcionarios"]
 						},
 						"description": "Admin cria novo funcionário - sincroniza com Auth Service"
+					}
+				},
+				{
+					"name": "Criar Admin (Master)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token_master}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Admin Criado por Master\",\n  \"cpf\": \"98765432100\",\n  \"login\": \"admin.master\",\n  \"senha\": \"admin456\",\n  \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/admin/funcionarios",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "admin", "funcionarios"]
+						},
+						"description": "MASTER cria novo administrador - poder exclusivo"
 					}
 				},
 				{

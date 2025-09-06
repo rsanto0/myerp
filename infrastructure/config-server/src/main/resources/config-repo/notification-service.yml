@@ -1,0 +1,46 @@
+# Configurações do Notification Service
+
+notification:
+  email:
+    enabled: true
+    smtp:
+      host: smtp.gmail.com
+      port: 587
+      username: ${SMTP_USERNAME:myerp@gmail.com}
+      password: ${SMTP_PASSWORD:app-password}
+      auth: true
+      starttls: true
+    from:
+      name: "MyERP Sistema"
+      email: "noreply@myerp.com"
+  
+  sms:
+    enabled: true
+    provider: twilio
+    twilio:
+      account-sid: ${TWILIO_ACCOUNT_SID:your-account-sid}
+      auth-token: ${TWILIO_AUTH_TOKEN:your-auth-token}
+      from-number: ${TWILIO_FROM_NUMBER:+1234567890}
+  
+  whatsapp:
+    enabled: false
+    provider: twilio
+    twilio:
+      account-sid: ${TWILIO_ACCOUNT_SID:your-account-sid}
+      auth-token: ${TWILIO_AUTH_TOKEN:your-auth-token}
+      from-number: ${TWILIO_WHATSAPP_FROM:whatsapp:+14155238886}
+
+# Templates
+templates:
+  base-path: classpath:/templates/
+  email:
+    welcome: "welcome-email.html"
+    password-reset: "password-reset.html"
+    ponto-registro: "ponto-registro.html"
+  sms:
+    welcome: "Bem-vindo ao MyERP! Seu login: {{login}}"
+    ponto-confirmacao: "Ponto registrado: {{tipo}} às {{hora}}"
+
+logging:
+  level:
+    com.myerp.notification: DEBUG

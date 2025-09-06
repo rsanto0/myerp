@@ -45,6 +45,10 @@
             <groupId>com.myerp</groupId>
             <artifactId>common-lib</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.myerp</groupId>
+            <artifactId>notification-lib</artifactId>
+        </dependency>
         
         <!-- OpenCV para processamento de imagem -->
         <dependency>
@@ -57,7 +61,6 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.3</version>
             <scope>runtime</scope>
         </dependency>
         
@@ -67,11 +70,7 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         
-        <!-- Email -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
+
         
         <!-- Scheduler -->
         <dependency>

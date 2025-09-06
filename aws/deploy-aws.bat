@@ -10,12 +10,24 @@ REM Verificar se AWS_ACCOUNT_ID está definido
 if "%AWS_ACCOUNT_ID%"=="" (
     echo ERRO: Defina AWS_ACCOUNT_ID primeiro!
     echo.
-    echo No Windows:
-    echo set AWS_ACCOUNT_ID=123456789012
+    echo Opções:
+    echo 1. set AWS_ACCOUNT_ID=123456789012
+    echo 2. Execute: setup-aws.bat
+    echo 3. Execute: aws-manager.bat setup
     echo.
-    echo Ou use: setup-aws.bat
-    pause
-    exit /b 1
+    set /p AUTO_SETUP="Executar setup automaticamente? (S/N) [N]: "
+    if /i "!AUTO_SETUP!"=="S" (
+        echo Executando setup-aws.bat...
+        call setup-aws.bat
+        if !errorlevel! neq 0 (
+            echo Setup falhou!
+            pause
+            exit /b 1
+        )
+    ) else (
+        pause
+        exit /b 1
+    )
 )
 
 REM Verificar se AWS CLI está configurado

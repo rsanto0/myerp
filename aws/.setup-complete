@@ -1,0 +1,5 @@
+# Flag file created by setup-aws.bat
+# Indicates AWS setup has been completed
+SETUP_DATE=%date% %time%
+AWS_REGION=%AWS_REGION%
+AWS_ACCOUNT_ID=%AWS_ACCOUNT_ID%
