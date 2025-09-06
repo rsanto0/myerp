@@ -1,13 +1,13 @@
 {
 	"info": {
-		"_postman_id": "myerp-system-collection",
+		"_postman_id": "myerp-complete-collection",
 		"name": "MyERP - Sistema Completo",
-		"description": "Collection completa do sistema MyERP com todos os módulos e fluxos de teste",
+		"description": "Collection COMPLETA com TODOS os endpoints implementados no MyERP",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "🔐 1. Auth Service",
+			"name": "1. Auth Service (8081)",
 			"item": [
 				{
 					"name": "Login Master",
@@ -41,13 +41,10 @@
 							"raw": "{\n  \"login\": \"master\",\n  \"senha\": \"master123\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/auth/login",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
 							"path": ["auth", "login"]
-						},
-						"description": "Login do MASTER - salva token automaticamente"
+						}
 					}
 				},
 				{
@@ -62,7 +59,7 @@
 									"    pm.environment.set('jwt_token', response.token);",
 									"    pm.environment.set('user_id', response.userId);",
 									"    pm.environment.set('user_role', response.role);",
-									"    console.log('Token JWT salvo:', response.token);",
+									"    console.log('Token ADMIN salvo:', response.token);",
 									"}"
 								],
 								"type": "text/javascript"
@@ -82,17 +79,14 @@
 							"raw": "{\n  \"login\": \"admin\",\n  \"senha\": \"admin123\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/auth/login",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
 							"path": ["auth", "login"]
-						},
-						"description": "Login do administrador - salva token automaticamente"
+						}
 					}
 				},
 				{
-					"name": "Login Funcionário",
+					"name": "Login Funcionario",
 					"event": [
 						{
 							"listen": "test",
@@ -102,7 +96,7 @@
 									"    const response = pm.response.json();",
 									"    pm.environment.set('jwt_token_funcionario', response.token);",
 									"    pm.environment.set('funcionario_id', response.userId);",
-									"    console.log('Token Funcionário salvo:', response.token);",
+									"    console.log('Token FUNCIONARIO salvo:', response.token);",
 									"}"
 								],
 								"type": "text/javascript"
@@ -122,13 +116,10 @@
 							"raw": "{\n  \"login\": \"funcionario\",\n  \"senha\": \"123456\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/auth/login",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
 							"path": ["auth", "login"]
-						},
-						"description": "Login do funcionário - salva token automaticamente"
+						}
 					}
 				},
 				{
@@ -142,17 +133,14 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/auth/validate",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/auth/validate",
+							"host": ["{{base_url}}"],
 							"path": ["auth", "validate"]
-						},
-						"description": "Valida se o token JWT está válido"
+						}
 					}
 				},
 				{
-					"name": "Criar Usuário",
+					"name": "Criar Usuario",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -163,26 +151,22 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"nome\": \"João Silva\",\n  \"cpf\": \"12345678901\",\n  \"login\": \"joao\",\n  \"senha\": \"123456\",\n  \"role\": \"FUNCIONARIO\"\n}"
+							"raw": "{\n  \"nome\": \"Novo Usuario\",\n  \"cpf\": \"12345678901\",\n  \"login\": \"novo.user\",\n  \"senha\": \"123456\",\n  \"role\": \"FUNCIONARIO\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/auth/users",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/auth/users",
+							"host": ["{{base_url}}"],
 							"path": ["auth", "users"]
-						},
-						"description": "Criar novo usuário no sistema"
+						}
 					}
 				}
-			],
-			"description": "Endpoints de autenticação e gerenciamento de usuários"
+			]
 		},
 		{
-			"name": "👥 2. RH Module",
+			"name": "2. RH Module (8082)",
 			"item": [
 				{
-					"name": "Registrar Ponto (Funcionário)",
+					"name": "Registrar Ponto (Funcionario)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -200,17 +184,14 @@
 							"raw": "{\n  \"tipo\": \"ENTRADA\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/pontos/{{funcionario_id}}/registrar",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/api/pontos/{{funcionario_id}}/registrar",
+							"host": ["{{base_url}}"],
 							"path": ["api", "pontos", "{{funcionario_id}}", "registrar"]
-						},
-						"description": "Funcionário registra seu próprio ponto"
+						}
 					}
 				},
 				{
-					"name": "Consultar Pontos (Funcionário)",
+					"name": "Consultar Pontos (Funcionario)",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -220,17 +201,14 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/pontos/{{funcionario_id}}",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/api/pontos/{{funcionario_id}}",
+							"host": ["{{base_url}}"],
 							"path": ["api", "pontos", "{{funcionario_id}}"]
-						},
-						"description": "Funcionário consulta seus próprios registros"
+						}
 					}
 				},
 				{
-					"name": "Listar Funcionários (Admin)",
+					"name": "Listar Funcionarios (Admin)",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -240,17 +218,14 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/admin/funcionarios",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/api/admin/funcionarios",
+							"host": ["{{base_url}}"],
 							"path": ["api", "admin", "funcionarios"]
-						},
-						"description": "Admin lista todos os funcionários"
+						}
 					}
 				},
 				{
-					"name": "Criar Funcionário (Admin)",
+					"name": "Criar Funcionario (Admin)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -265,16 +240,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"nome\": \"Maria Santos\",\n  \"cpf\": \"98765432100\",\n  \"login\": \"maria\",\n  \"senha\": \"123456\",\n  \"role\": \"FUNCIONARIO\"\n}"
+							"raw": "{\n  \"nome\": \"Funcionario Teste\",\n  \"cpf\": \"98765432100\",\n  \"login\": \"func.teste\",\n  \"senha\": \"123456\",\n  \"role\": \"FUNCIONARIO\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/admin/funcionarios",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/api/admin/funcionarios",
+							"host": ["{{base_url}}"],
 							"path": ["api", "admin", "funcionarios"]
-						},
-						"description": "Admin cria novo funcionário - sincroniza com Auth Service"
+						}
 					}
 				},
 				{
@@ -293,16 +265,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"nome\": \"Admin Criado por Master\",\n  \"cpf\": \"98765432100\",\n  \"login\": \"admin.master\",\n  \"senha\": \"admin456\",\n  \"role\": \"ADMIN\"\n}"
+							"raw": "{\n  \"nome\": \"Admin Criado por Master\",\n  \"cpf\": \"11122233344\",\n  \"login\": \"admin.master\",\n  \"senha\": \"admin456\",\n  \"role\": \"ADMIN\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/admin/funcionarios",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/api/admin/funcionarios",
+							"host": ["{{base_url}}"],
 							"path": ["api", "admin", "funcionarios"]
-						},
-						"description": "MASTER cria novo administrador - poder exclusivo"
+						}
 					}
 				},
 				{
@@ -316,48 +285,16 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/admin/pontos",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
+							"raw": "{{base_url}}/api/admin/pontos",
+							"host": ["{{base_url}}"],
 							"path": ["api", "admin", "pontos"]
-						},
-						"description": "Admin visualiza todos os registros de ponto"
-					}
-				}
-				},
-				{
-					"name": "Cadastrar Biometria (Admin)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt_token}}"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"usuarioId\": 2,\n  \"nomeUsuario\": \"Funcionario Teste\",\n  \"tipo\": \"FACIAL\",\n  \"dadosBiometricos\": \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/admin/biometria/cadastrar",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
-							"path": ["api", "admin", "biometria", "cadastrar"]
-						},
-						"description": "Admin cadastra biometria para funcionário - integração RH-Biometria"
+						}
 					}
 				},
 				{
-					"name": "Verificar Biometria (Admin)",
+					"name": "Remover Funcionario (Admin)",
 					"request": {
-						"method": "GET",
+						"method": "DELETE",
 						"header": [
 							{
 								"key": "Authorization",
@@ -365,59 +302,100 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/admin/biometria/verificar/2",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8080",
-							"path": ["api", "admin", "biometria", "verificar", "2"]
-						},
-						"description": "Admin verifica se funcionário tem biometria cadastrada"
+							"raw": "{{base_url}}/api/admin/funcionarios/3",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "funcionarios", "3"]
+						}
+					}
+				},
+				{
+					"name": "Remover Ponto (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/admin/pontos/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "pontos", "1"]
+						}
 					}
 				}
-			],
-			"description": "Endpoints do módulo de RH - funcionários, controle de ponto e biometria"
+			]
 		},
 		{
-			"name": "📷 3. Biometria Module",
+			"name": "3. Biometria Module (8083)",
 			"item": [
 				{
-					"name": "Simular Detecção - Entrada",
+					"name": "Simular Deteccao - Entrada",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8083/api/biometria/simular-deteccao?nomeFuncionario=João Silva&movimento=ENTRADA",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8083",
+							"raw": "{{biometria_url}}/api/biometria/simular-deteccao?nomeFuncionario=Joao Silva&movimento=ENTRADA",
+							"host": ["{{biometria_url}}"],
 							"path": ["api", "biometria", "simular-deteccao"],
 							"query": [
 								{
 									"key": "nomeFuncionario",
-									"value": "João Silva"
+									"value": "Joao Silva"
 								},
 								{
 									"key": "movimento",
 									"value": "ENTRADA"
 								}
 							]
-						},
-						"description": "Simula detecção facial de entrada"
+						}
 					}
 				},
 				{
-					"name": "Listar Eventos de Detecção",
+					"name": "Simular Deteccao - Saida",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{biometria_url}}/api/biometria/simular-deteccao?nomeFuncionario=Joao Silva&movimento=SAIDA",
+							"host": ["{{biometria_url}}"],
+							"path": ["api", "biometria", "simular-deteccao"],
+							"query": [
+								{
+									"key": "nomeFuncionario",
+									"value": "Joao Silva"
+								},
+								{
+									"key": "movimento",
+									"value": "SAIDA"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Listar Eventos",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8083/api/biometria/eventos",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8083",
+							"raw": "{{biometria_url}}/api/biometria/eventos",
+							"host": ["{{biometria_url}}"],
 							"path": ["api", "biometria", "eventos"]
-						},
-						"description": "Lista todos os eventos de detecção facial"
+						}
+					}
+				},
+				{
+					"name": "Eventos Pendentes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{biometria_url}}/api/biometria/eventos/pendentes",
+							"host": ["{{biometria_url}}"],
+							"path": ["api", "biometria", "eventos", "pendentes"]
+						}
 					}
 				},
 				{
@@ -426,20 +404,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8083/api/biometria/dashboard",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8083",
+							"raw": "{{biometria_url}}/api/biometria/dashboard",
+							"host": ["{{biometria_url}}"],
 							"path": ["api", "biometria", "dashboard"]
-						},
-						"description": "Dashboard com estatísticas do sistema de biometria"
+						}
 					}
 				}
-			],
-			"description": "Endpoints do módulo de biometria - reconhecimento facial e automação"
+			]
 		},
 		{
-			"name": "📊 4. Monitoring Module",
+			"name": "4. Monitoring Module (8084)",
 			"item": [
 				{
 					"name": "Dashboard Geral",
@@ -447,13 +421,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8084/api/monitoring/dashboard",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8084",
+							"raw": "{{monitoring_url}}/api/monitoring/dashboard",
+							"host": ["{{monitoring_url}}"],
 							"path": ["api", "monitoring", "dashboard"]
-						},
-						"description": "Dashboard consolidado com status de todos os serviços"
+						}
 					}
 				},
 				{
@@ -462,38 +433,155 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8084/api/monitoring/health",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8084",
+							"raw": "{{monitoring_url}}/api/monitoring/health",
+							"host": ["{{monitoring_url}}"],
 							"path": ["api", "monitoring", "health"]
-						},
-						"description": "Status de saúde do sistema de monitoramento"
+						}
 					}
 				},
 				{
-					"name": "Status dos Serviços",
+					"name": "Status dos Servicos",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8084/api/monitoring/services",
-							"protocol": "http",
-							"host": ["localhost"],
-							"port": "8084",
+							"raw": "{{monitoring_url}}/api/monitoring/services",
+							"host": ["{{monitoring_url}}"],
 							"path": ["api", "monitoring", "services"]
-						},
-						"description": "Status individual de cada microserviço"
+						}
+					}
+				},
+				{
+					"name": "Metricas do Sistema",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{monitoring_url}}/api/monitoring/metrics",
+							"host": ["{{monitoring_url}}"],
+							"path": ["api", "monitoring", "metrics"]
+						}
 					}
 				}
-			],
-			"description": "Endpoints do módulo de monitoramento - dashboard e métricas"
+			]
+		},
+		{
+			"name": "5. Eureka Server (8761)",
+			"item": [
+				{
+					"name": "Eureka Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{eureka_url}}/",
+							"host": ["{{eureka_url}}"],
+							"path": [""]
+						}
+					}
+				},
+				{
+					"name": "Servicos Registrados",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{eureka_url}}/eureka/apps",
+							"host": ["{{eureka_url}}"],
+							"path": ["eureka", "apps"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Config Server (8888)",
+			"item": [
+				{
+					"name": "Config Global",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{config_url}}/application/default",
+							"host": ["{{config_url}}"],
+							"path": ["application", "default"]
+						}
+					}
+				},
+				{
+					"name": "Config Auth Service",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{config_url}}/auth-service/local",
+							"host": ["{{config_url}}"],
+							"path": ["auth-service", "local"]
+						}
+					}
+				},
+				{
+					"name": "Config Notification Service",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{config_url}}/notification-service/local",
+							"host": ["{{config_url}}"],
+							"path": ["notification-service", "local"]
+						}
+					}
+				},
+				{
+					"name": "Refresh Config",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{config_url}}/actuator/refresh",
+							"host": ["{{config_url}}"],
+							"path": ["actuator", "refresh"]
+						}
+					}
+				}
+			]
 		}
 	],
 	"variable": [
 		{
 			"key": "base_url",
 			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "eureka_url",
+			"value": "http://localhost:8761",
+			"type": "string"
+		},
+		{
+			"key": "auth_url",
+			"value": "http://localhost:8081",
+			"type": "string"
+		},
+		{
+			"key": "rh_url",
+			"value": "http://localhost:8082",
+			"type": "string"
+		},
+		{
+			"key": "biometria_url",
+			"value": "http://localhost:8083",
+			"type": "string"
+		},
+		{
+			"key": "monitoring_url",
+			"value": "http://localhost:8084",
+			"type": "string"
+		},
+		{
+			"key": "config_url",
+			"value": "http://localhost:8888",
 			"type": "string"
 		}
 	]

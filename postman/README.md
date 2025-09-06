@@ -1,89 +1,65 @@
-# Collections Postman - MyERP
+# 📡 Postman Collections - MyERP
 
-## 📋 Collections Disponíveis
+## 🚀 **Integração GitHub + Postman**
 
-### **MyERP-System.postman_collection.json**
-Collection principal com **todos os endpoints** do sistema MyERP:
+### 📋 **Collections Disponíveis**
+- **MyERP-System.postman_collection.json** - APIs completas
+- **MyERP-Tests.postman_collection.json** - Testes automatizados  
+- **MyERP-Environment.postman_environment.json** - Variáveis
 
-#### **🔐 1. Auth Service**
-- Login Admin/Funcionário (salva JWT automaticamente)
-- Validar Token
-- Criar Usuário
+### 🔄 **Sincronização Automática**
 
-#### **👥 2. RH Module** 
-- Registrar Ponto (Funcionário)
-- Consultar Pontos (Funcionário)
-- Listar Funcionários (Admin)
-- Criar Funcionário (Admin)
-- Listar Todos os Pontos (Admin)
+**GitHub Actions** sincroniza automaticamente:
+- ✅ Validação com Newman
+- ✅ Upload para Postman Cloud
+- ✅ Comentários em PRs
 
-#### **📷 3. Biometria Module**
-- Simular Detecção Facial
-- Listar Eventos de Detecção
-- Dashboard Biometria
+### 🔧 **Configuração**
 
-#### **📊 4. Monitoring Module**
-- Dashboard Geral
-- Health Check
-- Status dos Serviços
-
-### **MyERP-Tests.postman_collection.json**
-Collection de **testes automatizados** com validações.
-
-### **MyERP-Environment.postman_environment.json**
-Variáveis de ambiente com:
-- URLs base
-- Tokens JWT (salvos automaticamente)
-- IDs de usuários
-
-## 🚀 Como Usar
-
-### **1. Importar no Postman**
+**1. Secrets do GitHub:**
 ```
-File → Import → Upload Files
-- MyERP-System.postman_collection.json
-- MyERP-Environment.postman_environment.json
+POSTMAN_API_KEY=your-postman-api-key
+COLLECTION_UID=your-collection-uid
 ```
 
-### **2. Configurar Environment**
-- Selecione "MyERP Environment" no canto superior direito
-- URLs já configuradas para desenvolvimento local
+**2. Obter API Key:**
+- Postman → Settings → API Keys → Generate
 
-### **3. Fluxo de Teste**
-1. **Login Admin** → JWT salvo automaticamente
-2. **Criar Funcionário** → Sincroniza com Auth Service
-3. **Login Funcionário** → JWT funcionário salvo
-4. **Registrar Ponto** → Usa JWT do funcionário
-5. **Simular Biometria** → Registra ponto automaticamente
+**3. Obter Collection UID:**
+- Postman → Collection → Share → Get Link → Extrair UID
 
-## 🔧 Configurações
+### 📤 **Sincronização Manual**
+```bash
+# Script Windows
+scripts\sync-postman.bat
 
-### **URLs Base**
-- **API Gateway**: http://localhost:8080
-- **Biometria**: http://localhost:8083  
-- **Monitoring**: http://localhost:8084
+# Ou manual
+git add postman/
+git commit -m "chore: Atualizar collections"
+git push
+```
 
-### **Autenticação**
-- Tokens JWT salvos automaticamente após login
-- Headers Authorization configurados automaticamente
-- Variáveis de ambiente atualizadas dinamicamente
+### 🧪 **Testes Locais**
+```bash
+# Instalar Newman
+npm install -g newman
 
-## ✅ Funcionalidades
+# Testar collection
+newman run MyERP-System.postman_collection.json \
+  -e MyERP-Environment.postman_environment.json
+```
 
-- **Scripts automáticos** para captura de JWT
-- **Variáveis dinâmicas** (user_id, jwt_token)
-- **Endpoints atualizados** para nova arquitetura
-- **Validações de resposta** nos testes
-- **Fluxos completos** de negócio
+### 🎯 **Fluxo de Trabalho**
 
-## 📝 Notas
+1. **Editar** collections no Postman
+2. **Exportar** para pasta `postman/`
+3. **Commit** no Git
+4. **GitHub Actions** sincroniza automaticamente
+5. **Postman Cloud** atualizado
 
-- **Collection única**: Todos os módulos em uma collection
-- **Arquitetura atual**: Via API Gateway (porta 8080)
-- **Sincronização**: Funcionários criados no RH são sincronizados com Auth Service
-- **Logs estruturados**: Prefixos [MODULO] nos endpoints
+### 🔗 **Links Úteis**
+- [Postman API Docs](https://documenter.getpostman.com/view/631643/JsLs/)
+- [Newman CLI](https://github.com/postmanlabs/newman)
+- [GitHub Actions](https://docs.github.com/en/actions)
 
----
-
-**Última atualização:** 2025-09-06  
-**Versão:** Arquitetura unificada com Usuario centralizado
+**Sincronização automática entre Postman e GitHub! 🚀📡**

@@ -1,0 +1,52 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: auth-service
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  
+  # Configuração PostgreSQL
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/myerp_auth}
+    username: ${DATABASE_USERNAME:myerp_user}
+    password: ${DATABASE_PASSWORD:myerp_pass}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+# JWT
+jwt:
+  secret: ${JWT_SECRET:minhachavesecretasuperseguraparaojwt123456789}
+  expiration: ${JWT_EXPIRATION:3600000}
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Logs
+logging:
+  level:
+    com.exemplo.auth: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.springframework.boot: INFO
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr([%15.15t]){faint} %clr(%-5level) %clr(%logger{36}){cyan} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+  file:
+    name: logs/auth-service.log

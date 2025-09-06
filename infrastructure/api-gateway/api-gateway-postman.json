@@ -1,0 +1,386 @@
+{
+	"info": {
+		"_postman_id": "5fa83526-c67e-405e-90f1-c0d8db6d64dc",
+		"name": "API Gateway",
+		"description": "Collection para testar endpoints do API Gateway com roteamento, autenticação JWT e controle de acesso por roles v2.2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth Service (Publico)",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"{{auth_login}}\",\n  \"senha\": \"{{auth_senha}}\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/auth/login",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validar Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/auth/validate",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"auth",
+								"validate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sistema Ponto (Protegido)",
+			"item": [
+				{
+					"name": "Registrar Ponto - Entrada",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/pontos/{{funcionario_id}}/registrar?tipo=ENTRADA",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"pontos",
+								"{{funcionario_id}}",
+								"registrar"
+							],
+							"query": [
+								{
+									"key": "tipo",
+									"value": "ENTRADA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Ponto - Saída",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/pontos/{{funcionario_id}}/registrar?tipo=SAIDA",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"pontos",
+								"{{funcionario_id}}",
+								"registrar"
+							],
+							"query": [
+								{
+									"key": "tipo",
+									"value": "SAIDA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Pontos do Funcionário",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/pontos/{{funcionario_id}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"pontos",
+								"{{funcionario_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Administração (Protegido)",
+			"item": [
+				{
+					"name": "Listar Funcionários",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/admin/funcionarios",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"funcionarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Funcionário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Silva\",\n  \"cpf\": \"98765432100\",\n  \"login\": \"joao\",\n  \"senha\": \"1234\",\n  \"role\": \"FUNCIONARIO\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/admin/funcionarios",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"funcionarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Administrador",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Maria Admin\",\n  \"cpf\": \"12345678900\",\n  \"login\": \"maria.admin\",\n  \"senha\": \"admin456\",\n  \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/admin/funcionarios",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"funcionarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todos os Pontos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/admin/pontos",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"pontos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remover Funcionário",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/admin/funcionarios/{{funcionario_id}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"funcionarios",
+								"{{funcionario_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remover Ponto",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/admin/pontos/{{ponto_id}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"pontos",
+								"{{ponto_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Auto-save JWT token from auth login response",
+					"if (pm.response.code === 200 && pm.request.url.toString().includes('/auth/login')) {",
+					"    const response = pm.response.json();",
+					"    if (response.token) {",
+					"        pm.environment.set('jwt_token', response.token);",
+					"        console.log('JWT token saved to environment');",
+					"    }",
+					"    if (response.userId) {",
+					"        pm.environment.set('funcionario_id', response.userId);",
+					"        console.log('User ID saved to environment');",
+					"    }",
+					"}"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "auth_login",
+			"value": "admin",
+			"type": "string"
+		},
+		{
+			"key": "auth_senha",
+			"value": "admin123",
+			"type": "string"
+		},
+		{
+			"key": "funcionario_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "ponto_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
