@@ -34,6 +34,7 @@
         <!-- Módulos de Negócio -->
         <module>modules/rh-module</module>
         <module>modules/biometria-module</module>
+        <module>modules/monitoring-module</module>
         
         <!-- Bibliotecas Compartilhadas -->
         <module>shared/common-lib</module>

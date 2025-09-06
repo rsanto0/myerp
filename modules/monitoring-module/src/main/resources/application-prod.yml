@@ -1,0 +1,41 @@
+# Profile para produção
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:biometria_db}
+    username: ${DB_USER:myerp_user}
+    password: ${DB_PASS:myerp_pass}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://eureka-server:8761/eureka/}
+
+services:
+  eureka:
+    host: ${EUREKA_HOST:eureka-server}
+    port: ${EUREKA_PORT:8761}
+  api-gateway:
+    host: ${GATEWAY_HOST:api-gateway}
+    port: ${GATEWAY_PORT:8080}
+  auth-service:
+    host: ${AUTH_HOST:auth-service}
+    port: ${AUTH_PORT:8081}
+  rh-module:
+    host: ${RH_HOST:rh-module}
+    port: ${RH_PORT:8082}
+  biometria-module:
+    host: ${BIOMETRIA_HOST:biometria-module}
+    port: ${BIOMETRIA_PORT:8083}
+
+logging:
+  level:
+    com.myerp.monitoring: INFO
+    org.springframework.cloud: WARN

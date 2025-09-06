@@ -5,7 +5,7 @@
 ### 1. Iniciar PostgreSQL
 ```bash
 # Windows
-start-postgres.bat
+dev-scripts/start-postgres.bat
 
 # Linux/Mac
 docker-compose up -d postgres pgadmin
@@ -70,7 +70,7 @@ spring:
 
 ## 📝 Próximos Passos
 
-1. Execute `start-postgres.bat`
+1. Execute `dev-scripts/start-postgres.bat`
 2. Configure cada módulo com sua database específica
 3. Remova dependências H2 dos módulos
 4. Adicione dependência PostgreSQL nos pom.xml dos módulos

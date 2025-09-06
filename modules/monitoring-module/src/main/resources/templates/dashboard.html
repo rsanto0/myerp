@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyERP - Dashboard de Monitoramento</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-chart-line"></i> MyERP Monitoring</h1>
+                <div class="header-info">
+                    <span id="current-time"></span>
+                    <div class="status-indicator" id="system-status">
+                        <i class="fas fa-circle"></i> Sistema
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="summary-grid">
+            <div class="card summary-card">
+                <div class="card-icon green">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="services-up">0</h3>
+                    <p>Serviços Online</p>
+                </div>
+            </div>
+            
+            <div class="card summary-card">
+                <div class="card-icon red">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="services-down">0</h3>
+                    <p>Serviços Offline</p>
+                </div>
+            </div>
+            
+            <div class="card summary-card">
+                <div class="card-icon blue">
+                    <i class="fas fa-memory"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="memory-usage">0%</h3>
+                    <p>Uso de Memória</p>
+                </div>
+            </div>
+            
+            <div class="card summary-card">
+                <div class="card-icon orange">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="uptime">0s</h3>
+                    <p>Tempo Online</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-pie"></i> Status dos Serviços</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="servicesChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-area"></i> Uso de Memória</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="memoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Status -->
+        <div class="card services-card">
+            <div class="card-header">
+                <h3><i class="fas fa-list"></i> Status Detalhado dos Serviços</h3>
+                <button class="refresh-btn" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i> Atualizar
+                </button>
+            </div>
+            <div class="services-list" id="services-list">
+                <!-- Services will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- System Metrics -->
+        <div class="card metrics-card">
+            <div class="card-header">
+                <h3><i class="fas fa-tachometer-alt"></i> Métricas do Sistema</h3>
+            </div>
+            <div class="metrics-grid" id="metrics-grid">
+                <!-- Metrics will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

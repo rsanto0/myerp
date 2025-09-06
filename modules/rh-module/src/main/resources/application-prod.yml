@@ -1,0 +1,25 @@
+# Profile para produção
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:rh_db}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USER:myerp_user}
+    password: ${DB_PASS:myerp_pass}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://eureka-server:8761/eureka/}
+
+auth:
+  service:
+    url: ${AUTH_SERVICE_URL:http://auth-service:8081}
+
+logging:
+  level:
+    com.exemplo.ponto: INFO

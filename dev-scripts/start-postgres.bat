@@ -11,10 +11,12 @@ if %errorlevel% neq 0 (
 )
 
 echo Parando containers existentes...
+cd ..
 docker-compose down
 
 echo Iniciando PostgreSQL e pgAdmin...
 docker-compose up -d postgres pgadmin
+cd dev-scripts
 
 echo.
 echo ========================================
@@ -35,7 +37,9 @@ echo Aguardando inicializacao...
 timeout /t 10 /nobreak >nul
 
 echo Verificando status dos containers...
+cd ..
 docker-compose ps
+cd dev-scripts
 
 echo.
 echo Pronto para usar!

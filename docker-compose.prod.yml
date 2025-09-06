@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: myerp-postgres-prod
+    environment:
+      POSTGRES_DB: myerp_db
+      POSTGRES_USER: ${DB_USER:-myerp_user}
+      POSTGRES_PASSWORD: ${DB_PASS:-myerp_pass}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    networks:
+      - myerp-network
+
+  eureka-server:
+    build: ./infrastructure/service-discovery
+    container_name: myerp-eureka-prod
+    ports:
+      - "${EUREKA_PORT:-8761}:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - myerp-network
+    depends_on:
+      - postgres
+
+  auth-service:
+    build: ./infrastructure/auth-service
+    container_name: myerp-auth-prod
+    ports:
+      - "${AUTH_PORT:-8081}:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_URL=http://eureka-server:8761/eureka/
+    networks:
+      - myerp-network
+    depends_on:
+      - postgres
+      - eureka-server
+
+  api-gateway:
+    build: ./infrastructure/api-gateway
+    container_name: myerp-gateway-prod
+    ports:
+      - "${GATEWAY_PORT:-8080}:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_URL=http://eureka-server:8761/eureka/
+    networks:
+      - myerp-network
+    depends_on:
+      - eureka-server
+      - auth-service
+
+  monitoring-service:
+    build: ./modules/monitoring-module
+    container_name: myerp-monitoring-prod
+    ports:
+      - "${SERVER_PORT:-8084}:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_URL=http://eureka-server:8761/eureka/
+      - EUREKA_HOST=eureka-server
+      - GATEWAY_HOST=api-gateway
+      - AUTH_HOST=auth-service
+    networks:
+      - myerp-network
+    depends_on:
+      - eureka-server
+      - api-gateway
+
+volumes:
+  postgres_data_prod:
+
+networks:
+  myerp-network:
+    driver: bridge

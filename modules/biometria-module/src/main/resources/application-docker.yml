@@ -1,0 +1,19 @@
+# Profile para ambiente Docker
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/biometria_db
+    driver-class-name: org.postgresql.Driver
+    username: myerp_user
+    password: myerp_pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    hostname: biometria-module

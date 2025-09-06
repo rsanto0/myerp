@@ -5,10 +5,10 @@
 ### Método Rápido
 ```bash
 # Iniciar tudo automaticamente
-start-myerp.bat
+dev-scripts/start-myerp.bat
 
 # Parar tudo
-stop-myerp.bat
+dev-scripts/stop-myerp.bat
 ```
 
 ## 📋 Ordem Manual de Inicialização
@@ -183,8 +183,8 @@ curl http://localhost:8081/actuator/health
 
 ### Reiniciar Sistema Completo
 ```bash
-stop-myerp.bat
-start-myerp.bat
+dev-scripts/stop-myerp.bat
+dev-scripts/start-myerp.bat
 ```
 
 ## 📝 Notas Importantes

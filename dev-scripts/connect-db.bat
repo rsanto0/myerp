@@ -9,4 +9,5 @@ echo \d users    - Descrever tabela users
 echo SELECT * FROM users; - Ver dados da tabela
 echo \q          - Sair
 echo.
+cd ..
 docker exec -it myerp-postgres psql -U myerp_user -d myerp_db

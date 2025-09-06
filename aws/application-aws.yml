@@ -1,0 +1,60 @@
+# Profile para AWS Cloud
+spring:
+  cloud:
+    aws:
+      region:
+        static: ${AWS_REGION:us-east-1}
+      credentials:
+        instance-profile: true
+      
+  datasource:
+    url: jdbc:postgresql://${RDS_ENDPOINT}:${RDS_PORT:5432}/${RDS_DATABASE}
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+# Service Discovery via Route 53
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_DOMAIN}/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    hostname: ${EC2_INSTANCE_ID}
+    prefer-ip-address: false
+    metadata-map:
+      zone: ${AWS_AVAILABILITY_ZONE}
+
+# AWS Parameter Store Integration
+aws:
+  parameterstore:
+    enabled: true
+    prefix: /myerp/${ENVIRONMENT}
+  
+# Logging para CloudWatch
+logging:
+  level:
+    root: INFO
+    com.myerp: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{traceId}] %logger{36} - %msg%n"
+
+# Health checks para ALB
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+  health:
+    db:
+      enabled: true

@@ -1,0 +1,60 @@
+server:
+  port: ${SERVER_PORT:8084}
+
+spring:
+  application:
+    name: monitoring-service
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    initial-instance-info-replication-interval-seconds: 40
+    instance-info-replication-interval-seconds: 30
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+
+# Configurações de serviços
+services:
+  eureka:
+    host: ${EUREKA_HOST:localhost}
+    port: ${EUREKA_PORT:8761}
+  api-gateway:
+    host: ${GATEWAY_HOST:localhost}
+    port: ${GATEWAY_PORT:8080}
+  auth-service:
+    host: ${AUTH_HOST:localhost}
+    port: ${AUTH_PORT:8081}
+  rh-module:
+    host: ${RH_HOST:localhost}
+    port: ${RH_PORT:8082}
+  biometria-module:
+    host: ${BIOMETRIA_HOST:localhost}
+    port: ${BIOMETRIA_PORT:8083}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logging:
+  level:
+    com.myerp.monitoring: DEBUG
+    org.springframework.cloud: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

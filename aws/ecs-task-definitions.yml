@@ -1,0 +1,202 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'MyERP - ECS Task Definitions e Services'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: prod
+  
+  VPCId:
+    Type: String
+    Description: VPC ID from infrastructure stack
+  
+  PrivateSubnet1:
+    Type: String
+    Description: Private Subnet 1 ID
+  
+  PrivateSubnet2:
+    Type: String
+    Description: Private Subnet 2 ID
+  
+  ECRRepository:
+    Type: String
+    Description: ECR Repository URI base
+
+Resources:
+  # ECS Cluster
+  MyErpCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub 'myerp-cluster-${Environment}'
+      CapacityProviders:
+        - FARGATE
+        - FARGATE_SPOT
+      DefaultCapacityProviderStrategy:
+        - CapacityProvider: FARGATE
+          Weight: 1
+
+  # Task Execution Role
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+        - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+
+  # Task Role (para aplicações)
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: MyErpTaskPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                  - ssm:GetParameters
+                  - ssm:GetParametersByPath
+                  - secretsmanager:GetSecretValue
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+
+  # Eureka Service Task Definition
+  EurekaTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub 'myerp-eureka-${Environment}'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 512
+      Memory: 1024
+      ExecutionRoleArn: !Ref TaskExecutionRole
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: eureka
+          Image: !Sub '${ECRRepository}/myerp/eureka:${Environment}'
+          PortMappings:
+            - ContainerPort: 8761
+              Protocol: tcp
+          Environment:
+            - Name: SPRING_PROFILES_ACTIVE
+              Value: aws
+            - Name: ENVIRONMENT
+              Value: !Ref Environment
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Sub '/aws/ecs/myerp-eureka-${Environment}'
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+
+  # Auth Service Task Definition
+  AuthTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub 'myerp-auth-${Environment}'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 512
+      Memory: 1024
+      ExecutionRoleArn: !Ref TaskExecutionRole
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: auth
+          Image: !Sub '${ECRRepository}/myerp/auth:${Environment}'
+          PortMappings:
+            - ContainerPort: 8081
+              Protocol: tcp
+          Environment:
+            - Name: SPRING_PROFILES_ACTIVE
+              Value: aws
+            - Name: ENVIRONMENT
+              Value: !Ref Environment
+          Secrets:
+            - Name: RDS_USERNAME
+              ValueFrom: !Sub '/myerp/${Environment}/database/credentials:username'
+            - Name: RDS_PASSWORD
+              ValueFrom: !Sub '/myerp/${Environment}/database/credentials:password'
+            - Name: JWT_SECRET
+              ValueFrom: !Sub '/myerp/${Environment}/jwt/secret'
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Sub '/aws/ecs/myerp-auth-${Environment}'
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+
+  # API Gateway Task Definition
+  GatewayTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub 'myerp-gateway-${Environment}'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 512
+      Memory: 1024
+      ExecutionRoleArn: !Ref TaskExecutionRole
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: gateway
+          Image: !Sub '${ECRRepository}/myerp/gateway:${Environment}'
+          PortMappings:
+            - ContainerPort: 8080
+              Protocol: tcp
+          Environment:
+            - Name: SPRING_PROFILES_ACTIVE
+              Value: aws
+            - Name: ENVIRONMENT
+              Value: !Ref Environment
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Sub '/aws/ecs/myerp-gateway-${Environment}'
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+
+  # CloudWatch Log Groups
+  EurekaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/ecs/myerp-eureka-${Environment}'
+      RetentionInDays: 7
+
+  AuthLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/ecs/myerp-auth-${Environment}'
+      RetentionInDays: 7
+
+  GatewayLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/ecs/myerp-gateway-${Environment}'
+      RetentionInDays: 7
+
+Outputs:
+  ClusterName:
+    Description: ECS Cluster Name
+    Value: !Ref MyErpCluster
+    Export:
+      Name: !Sub '${AWS::StackName}-Cluster-Name'
