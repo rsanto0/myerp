@@ -32,7 +32,7 @@
         <module>infrastructure/auth-service</module>
         
         <!-- Módulos de Negócio -->
-        <module>modules/rh-module/sistema-ponto</module>
+        <module>modules/rh-module</module>
         <module>modules/biometria-module</module>
         
         <!-- Bibliotecas Compartilhadas -->

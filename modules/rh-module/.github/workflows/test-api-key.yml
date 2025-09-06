@@ -1,0 +1,53 @@
+name: Test Postman API Key
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Test API Key
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+        run: |
+          echo "🔍 Testando POSTMAN_API_KEY..."
+          
+          if [ -z "$POSTMAN_API_KEY" ]; then
+            echo "❌ POSTMAN_API_KEY não configurado!"
+            exit 1
+          fi
+          
+          echo "✅ API Key encontrado (${#POSTMAN_API_KEY} caracteres)"
+          echo "🔤 Formato: ${POSTMAN_API_KEY:0:5}...${POSTMAN_API_KEY: -5}"
+          
+          # Teste 1: Endpoint /me
+          echo ""
+          echo "🧪 Teste 1: GET /me"
+          RESPONSE1=$(curl -s -w "HTTP_CODE:%{http_code}" -H "X-Api-Key: $POSTMAN_API_KEY" "https://api.getpostman.com/me")
+          HTTP_CODE1=$(echo "$RESPONSE1" | grep -o "HTTP_CODE:[0-9]*" | cut -d: -f2)
+          BODY1=$(echo "$RESPONSE1" | sed 's/HTTP_CODE:[0-9]*$//')
+          
+          echo "Status: $HTTP_CODE1"
+          echo "Response: $BODY1"
+          
+          # Teste 2: Endpoint /collections
+          echo ""
+          echo "🧪 Teste 2: GET /collections"
+          RESPONSE2=$(curl -s -w "HTTP_CODE:%{http_code}" -H "X-Api-Key: $POSTMAN_API_KEY" "https://api.getpostman.com/collections")
+          HTTP_CODE2=$(echo "$RESPONSE2" | grep -o "HTTP_CODE:[0-9]*" | cut -d: -f2)
+          BODY2=$(echo "$RESPONSE2" | sed 's/HTTP_CODE:[0-9]*$//')
+          
+          echo "Status: $HTTP_CODE2"
+          echo "Response: $BODY2"
+          
+          # Resultado final
+          echo ""
+          if [ "$HTTP_CODE1" = "200" ] && [ "$HTTP_CODE2" = "200" ]; then
+            echo "✅ API Key válido e funcionando!"
+          else
+            echo "❌ API Key inválido ou com problemas"
+            echo "💡 Recrie a API Key no Postman: https://web.postman.co/settings/me/api-keys"
+            exit 1
+          fi

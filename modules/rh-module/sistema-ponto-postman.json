@@ -1,0 +1,366 @@
+{
+	"info": {
+		"_postman_id": "a762cfc1-feab-4211-b9eb-2c9c449244e9",
+		"name": "Sistema de Ponto API",
+		"description": "Collection para testar endpoints do sistema de controle de ponto - V1.3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Funcionários",
+			"item": [
+				{
+					"name": "Login Funcionário",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/funcionarios/login?login={{funcionario_login}}&senha={{funcionario_senha}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"funcionarios",
+								"login"
+							],
+							"query": [
+								{
+									"key": "login",
+									"value": "{{funcionario_login}}"
+								},
+								{
+									"key": "senha",
+									"value": "{{funcionario_senha}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Funcionários",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/funcionarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"funcionarios"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Registros de Ponto",
+			"item": [
+				{
+					"name": "Registrar Ponto - Entrada",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pontos/{{funcionario_id}}/registrar?tipo=ENTRADA",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pontos",
+								"{{funcionario_id}}",
+								"registrar"
+							],
+							"query": [
+								{
+									"key": "tipo",
+									"value": "ENTRADA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Ponto - Saída",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pontos/{{funcionario_id}}/registrar?tipo=SAIDA",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pontos",
+								"{{funcionario_id}}",
+								"registrar"
+							],
+							"query": [
+								{
+									"key": "tipo",
+									"value": "SAIDA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Pontos do Funcionário",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pontos/{{funcionario_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pontos",
+								"{{funcionario_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Administração",
+			"item": [
+				{
+					"name": "Cadastrar Administrador",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Admin Sistema\",\n  \"cpf\": \"00000000000\",\n  \"login\": \"admin\",\n  \"senha\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Administrador",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/login?login={{admin_login}}&senha={{admin_senha}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"login"
+							],
+							"query": [
+								{
+									"key": "login",
+									"value": "{{admin_login}}"
+								},
+								{
+									"key": "senha",
+									"value": "{{admin_senha}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Funcionário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Silva\",\n  \"cpf\": \"98765432100\",\n  \"login\": \"joao\",\n  \"senha\": \"1234\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/funcionarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"funcionarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Funcionários",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/funcionarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"funcionarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remover Funcionário",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/funcionarios/{{funcionario_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"funcionarios",
+								"{{funcionario_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todos os Pontos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/pontos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"pontos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remover Ponto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/pontos/{{ponto_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"pontos",
+								"{{ponto_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Auto-save funcionario ID from login response",
+					"if (pm.response.code === 200 && pm.request.url.toString().includes('/funcionarios/login')) {",
+					"    const response = pm.response.json();",
+					"    if (response.id) {",
+					"        pm.environment.set('funcionario_id', response.id);",
+					"        console.log('Funcionario ID saved to environment');",
+					"    }",
+					"}",
+					"",
+					"// Auto-save admin ID from login response", 
+					"if (pm.response.code === 200 && pm.request.url.toString().includes('/admin/login')) {",
+					"    const response = pm.response.json();",
+					"    if (response.id) {",
+					"        pm.environment.set('admin_id', response.id);",
+					"        console.log('Admin ID saved to environment');",
+					"    }",
+					"}"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "funcionario_login",
+			"value": "rodrigo",
+			"type": "string"
+		},
+		{
+			"key": "funcionario_senha",
+			"value": "1234",
+			"type": "string"
+		},
+		{
+			"key": "funcionario_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "admin_login",
+			"value": "admin",
+			"type": "string"
+		},
+		{
+			"key": "admin_senha",
+			"value": "admin123",
+			"type": "string"
+		},
+		{
+			"key": "ponto_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,102 @@
+name: Sync Postman Collection
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - '**/*-postman.json'
+  workflow_dispatch:
+
+jobs:
+  sync-postman:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Find Postman Collection
+      id: find-collection
+      run: |
+        COLLECTION=$(find . -name "*-postman.json" | head -1)
+        if [ -z "$COLLECTION" ]; then
+          echo "❌ Nenhuma collection *-postman.json encontrada"
+          exit 1
+        fi
+        echo "collection=$COLLECTION" >> $GITHUB_OUTPUT
+        echo "✅ Collection encontrada: $COLLECTION"
+        
+    - name: Debug Secrets
+      run: |
+        if [ -z "${{ secrets.POSTMAN_API_KEY }}" ]; then
+          echo "❌ POSTMAN_API_KEY não configurado nos secrets"
+          exit 1
+        else
+          echo "✅ POSTMAN_API_KEY encontrado"
+        fi
+        
+    - name: Sync Postman Collection
+      env:
+        POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+        COLLECTION_FILE: ${{ steps.find-collection.outputs.collection }}
+      run: |
+        # Extrai collection ID do arquivo
+        COLLECTION_ID=$(jq -r '.info.uid // .info._postman_id' "$COLLECTION_FILE")
+        COLLECTION_NAME=$(jq -r '.info.name' "$COLLECTION_FILE")
+        
+        echo "Collection ID encontrado: $COLLECTION_ID"
+        echo "Collection Name: $COLLECTION_NAME"
+        
+        # Prepara JSON no formato esperado pela API (remove _postman_id customizado)
+        jq '{"collection": (. | del(.info._postman_id) | del(.info.uid))}' "$COLLECTION_FILE" > wrapped_collection.json
+        
+        # Verifica se COLLECTION_UID está configurado nos secrets
+        if [ -n "${{ secrets.COLLECTION_UID }}" ]; then
+          COLLECTION_UID="${{ secrets.COLLECTION_UID }}"
+          echo "📋 Usando COLLECTION_UID dos secrets: $COLLECTION_UID"
+          
+          # Tenta atualizar collection existente
+          echo "📝 Tentando atualizar collection existente..."
+          if curl -X PUT \
+            "https://api.getpostman.com/collections/$COLLECTION_UID" \
+            -H "X-API-Key: $POSTMAN_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @wrapped_collection.json \
+            --fail-with-body; then
+            echo "✅ Collection atualizada com sucesso!"
+          else
+            echo "⚠️ Collection não encontrada - criando nova..."
+            RESPONSE=$(curl -X POST \
+              "https://api.getpostman.com/collections" \
+              -H "X-API-Key: $POSTMAN_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d @wrapped_collection.json \
+              --fail-with-body)
+            
+            NEW_ID=$(echo "$RESPONSE" | jq -r '.collection.id // .collection.uid')
+            echo "✅ Nova collection criada com ID: $NEW_ID"
+            echo "📋 COLLECTION_UID: $NEW_ID"
+            echo "⚠️ Atualize o secret COLLECTION_UID para: $NEW_ID"
+          fi
+          
+        else
+          
+          # Cria nova collection apenas se COLLECTION_UID não estiver configurado
+          echo "🆕 COLLECTION_UID não configurado - criando nova collection..."
+          
+          RESPONSE=$(curl -X POST \
+            "https://api.getpostman.com/collections" \
+            -H "X-API-Key: $POSTMAN_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @wrapped_collection.json \
+            --fail-with-body)
+          
+          NEW_ID=$(echo "$RESPONSE" | jq -r '.collection.id // .collection.uid')
+          echo "✅ Collection criada com ID: $NEW_ID"
+          echo "📋 COLLECTION_UID: $NEW_ID"
+          echo "⚠️  Configure este ID como secret COLLECTION_UID para reutilizar"
+          
+        fi
+        
+        # Limpa arquivo temporário
+        rm -f wrapped_collection.json

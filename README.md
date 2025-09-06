@@ -89,3 +89,14 @@ modulo/
 - Autenticação centralizada no Auth Service
 - JWT tokens para autorização
 - Validação de tokens no API Gateway
+
+## 🔒 Licença
+
+**Todos os direitos reservados.** Este projeto é proprietário e não possui licença pública.
+
+### ⚠️ Uso Restrito
+- ❌ **Uso comercial** não autorizado
+- ❌ **Modificação** não autorizada
+- ❌ **Distribuição** não autorizada
+- ✅ **Visualização** apenas para fins educacionais
+- 📧 **Contato necessário** para qualquer uso
