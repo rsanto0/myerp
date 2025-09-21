@@ -45,9 +45,13 @@
             <groupId>com.myerp</groupId>
             <artifactId>common-lib</artifactId>
         </dependency>
+        <!-- notification-lib removida - responsabilidade do RH Module -->
+        
+        <!-- JavaCV para captura de câmera -->
         <dependency>
-            <groupId>com.myerp</groupId>
-            <artifactId>notification-lib</artifactId>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.5.8</version>
         </dependency>
         
         <!-- OpenCV para processamento de imagem -->

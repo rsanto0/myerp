@@ -46,10 +46,9 @@ if "%PARAM1%"=="" (
     goto :end
 )
 
-echo 🚀 Executando deploy...
+echo 🚀 Executando deploy simples...
 echo Ambiente: %PARAM1%
 echo Região: %PARAM2%
-echo Domínio: %PARAM3%
 echo.
 
 REM Verificar se setup foi feito
@@ -62,7 +61,7 @@ if "%AWS_ACCOUNT_ID%"=="" (
     )
 )
 
-call deploy-aws.bat %PARAM1% %PARAM2% %PARAM3%
+call deploy-aws.bat %PARAM1% %PARAM2%
 goto :end
 
 :rollback
@@ -104,11 +103,11 @@ goto :end
 :full_deploy
 if "%PARAM1%"=="" (
     echo ❌ ERRO: Ambiente não especificado!
-    echo Uso: aws-manager.bat full-deploy [AMBIENTE] [REGIÃO] [DOMÍNIO]
+    echo Uso: aws-manager.bat full-deploy [AMBIENTE] [REGIÃO]
     goto :end
 )
 
-echo 🚀 Executando deploy completo (setup + deploy)...
+echo 🚀 Executando deploy completo simples (setup + deploy)...
 echo.
 
 echo [1/2] Setup AWS...
@@ -119,8 +118,8 @@ if %errorlevel% neq 0 (
 )
 
 echo.
-echo [2/2] Deploy aplicação...
-call deploy-aws.bat %PARAM1% %PARAM2% %PARAM3%
+echo [2/2] Deploy simples...
+call deploy-aws.bat %PARAM1% %PARAM2%
 goto :end
 
 :show_help
@@ -129,19 +128,19 @@ echo.
 echo 🎯 COMANDOS DISPONÍVEIS:
 echo.
 echo   setup                           - Configuração inicial AWS
-echo   deploy [env] [region] [domain]  - Deploy da aplicação
-echo   rollback [env] [region]         - Rollback completo
+echo   deploy [env] [region]           - Deploy simples (ECR + Parameter Store)
+echo   rollback [env] [region]         - Rollback simples
 echo   status                          - Status dos recursos
-echo   full-deploy [env] [region] [domain] - Setup + Deploy
+echo   full-deploy [env] [region]      - Setup + Deploy simples
 echo   help                            - Esta ajuda
 echo.
 echo 💡 EXEMPLOS:
 echo.
 echo   aws-manager.bat setup
-echo   aws-manager.bat deploy prod us-east-1 myerp.com
-echo   aws-manager.bat rollback prod us-east-1
+echo   aws-manager.bat deploy dev us-east-1
+echo   aws-manager.bat rollback dev us-east-1
 echo   aws-manager.bat status
-echo   aws-manager.bat full-deploy prod us-east-1 myerp.com
+echo   aws-manager.bat full-deploy dev us-east-1
 echo.
 echo 📋 FLUXO RECOMENDADO:
 echo.

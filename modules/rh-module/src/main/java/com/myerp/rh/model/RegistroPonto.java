@@ -20,6 +20,10 @@ public class RegistroPonto {
     @Enumerated(EnumType.STRING)
     @NotNull
     private TipoPonto tipo;
+    
+    private Long funcionarioId;
+    
+    private String observacoes;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -32,4 +36,14 @@ public class RegistroPonto {
 
     public TipoPonto getTipo() { return tipo; }
     public void setTipo(TipoPonto tipo) { this.tipo = tipo; }
+    
+    public Long getFuncionarioId() { return funcionarioId; }
+    public void setFuncionarioId(Long funcionarioId) { this.funcionarioId = funcionarioId; }
+    
+    public String getObservacoes() { return observacoes; }
+    public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
+    
+    // Compatibility methods
+    public void setTipoRegistro(TipoPonto tipo) { this.tipo = tipo; }
+    public TipoPonto getTipoRegistro() { return this.tipo; }
 }

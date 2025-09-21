@@ -1,0 +1,3 @@
+@echo off 
+echo Redirecionando para MyERP Manager... 
+call myerp-manager.bat 

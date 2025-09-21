@@ -2,16 +2,16 @@
 
 ## 🚀 **INÍCIO RÁPIDO**
 
-### **Deploy Completo (Recomendado)**
+### **Deploy Simples (Recomendado)**
 ```bash
-# Uma linha faz tudo
-aws-manager.bat full-deploy prod us-east-1 myerp.com
+# Deploy básico para desenvolvimento
+aws-manager.bat full-deploy dev us-east-1
 ```
 
-### **Rollback Seguro**
+### **Rollback Simples**
 ```bash
-# Remove tudo
-aws-manager.bat rollback prod us-east-1
+# Remove recursos básicos
+aws-manager.bat rollback dev us-east-1
 ```
 
 ### **Status dos Recursos**
@@ -28,8 +28,8 @@ aws-manager.bat status
 |--------|--------|-----|
 | **aws-manager.bat** | Orquestrador principal | `aws-manager.bat help` |
 | **setup-aws.bat** | Configuração inicial | `setup-aws.bat` |
-| **deploy-aws.bat** | Deploy da aplicação | `deploy-aws.bat prod us-east-1 myerp.com` |
-| **rollback-aws.bat** | Rollback seguro | `rollback-aws.bat prod us-east-1` |
+| **deploy-aws.bat** | Deploy simples (ECR + Parameter Store) | `deploy-aws.bat dev us-east-1` |
+| **rollback-aws.bat** | Rollback simples | `rollback-aws.bat dev us-east-1` |
 
 ---
 
@@ -53,11 +53,11 @@ Inclui:
 # Setup inicial (uma vez)
 aws-manager.bat setup
 
-# Deploy (quantas vezes precisar)
-aws-manager.bat deploy prod us-east-1 myerp.com
+# Deploy simples (desenvolvimento)
+aws-manager.bat deploy dev us-east-1
 
-# Rollback (quando necessário)
-aws-manager.bat rollback prod us-east-1
+# Rollback simples (quando necessário)
+aws-manager.bat rollback dev us-east-1
 
 # Status (verificar recursos)
 aws-manager.bat status

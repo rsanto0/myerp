@@ -21,6 +21,9 @@ graph TB
     subgraph "💼 Módulos de Negócio"
         E[RH Module :8082<br/>👥 Recursos Humanos]
         F[Biometria Module :8083<br/>📷 Segurança Inteligente]
+        I[Monitoring Module :8084<br/>📊 Dashboard]
+        J[Company Module :8085<br/>🏢 Gestão Empresas]
+        K[Financial Module :8086<br/>💰 Financeiro]
     end
     
     subgraph "🗄️ Camada de Dados"
@@ -31,19 +34,29 @@ graph TB
     A --> D
     A --> E
     A --> F
+    A --> I
+    A --> J
+    A --> K
     
     B --> A
     B --> D
     B --> E
     B --> F
+    B --> I
+    B --> J
+    B --> K
     
     C --> D
     C --> E
     C --> F
+    C --> J
+    C --> K
     
     D --> G
     E --> G
     F --> G
+    J --> G
+    K --> G
     
     style A fill:#f3e5f5
     style B fill:#e1f5fe
@@ -77,14 +90,29 @@ graph TB
 - **Analogia:** Departamento de segurança e crachás
 
 ### 👥 **Recursos Humanos** (RH Module)
-- **Função:** Gerencia funcionários e controle de ponto
-- **Responsabilidade:** CRUD funcionários, registros de ponto
-- **Analogia:** Departamento de RH tradicional
+- **Função:** Gerencia funcionários e processa eventos de ponto
+- **Responsabilidade:** CRUD funcionários, processar eventos biométricos, registros de ponto
+- **Analogia:** Departamento de RH tradicional com sistema automatizado
 
 ### 📷 **Segurança Inteligente** (Biometria Module)
-- **Função:** Reconhecimento facial e ponto automático
-- **Responsabilidade:** Detecção, validação e alertas
-- **Analogia:** Sistema de câmeras inteligentes
+- **Função:** Detecção e identificação biométrica
+- **Responsabilidade:** Capturar, detectar e emitir eventos de detecção
+- **Analogia:** Sistema de câmeras e sensores inteligentes
+
+### 📊 **Centro de Controle** (Monitoring Module)
+- **Função:** Monitora saúde de todos os departamentos
+- **Responsabilidade:** Health checks, métricas e alertas
+- **Analogia:** Sala de monitoramento da empresa
+
+### 🏢 **Gestão Corporativa** (Company Module)
+- **Função:** Gerencia múltiplas empresas (multi-tenant)
+- **Responsabilidade:** Empresas, departamentos, cargos, feature flags
+- **Analogia:** Holding que gerencia várias empresas
+
+### 💰 **Departamento Financeiro** (Financial Module)
+- **Função:** Gestão financeira completa
+- **Responsabilidade:** Boletos, PIX, conciliação bancária
+- **Analogia:** Departamento financeiro tradicional
 
 ### 📚 **Arquivo Central** (PostgreSQL)
 - **Função:** Armazena todos os documentos da empresa
@@ -103,12 +131,13 @@ graph TB
 6. 📷 Câmeras ativadas (Biometria Module)
 ```
 
-### 2️⃣ **Funcionário Chegando ao Trabalho**
+### 2️⃣ **Funcionário Chegando ao Trabalho (Event-Driven)**
 ```
 1. 📷 Câmera detecta João Silva
-2. 📷 Biometria → 👥 RH: "Registrar entrada de João"
-3. 👥 RH → 📚 Arquivo: Salva registro de ponto
-4. 📷 Biometria → 📧 Email: "João chegou às 8:05"
+2. 📷 Biometria → 📡 Evento: "João Silva detectado às 08:05"
+3. 👥 RH recebe evento → Valida horário → Registra ponto
+4. 👥 RH → 📚 Arquivo: Salva registro de ponto
+5. 👥 RH → 📧 Email: "João chegou às 8:05" (se necessário)
 ```
 
 ### 3️⃣ **Admin Consultando Relatórios**
@@ -137,14 +166,17 @@ graph TB
 
 | Serviço | Porta | Protocolo | Database |
 |---------|-------|-----------|----------|
-| PostgreSQL | 5432 | TCP | - |
-| pgAdmin | 5050 | HTTP | - |
-| Eureka Server | 8761 | HTTP | - |
-| Config Server | 8888 | HTTP | - |
-| API Gateway | 8080 | HTTP | - |
-| Auth Service | 8081 | HTTP | auth_db |
-| RH Module | 8082 | HTTP | rh_db |
-| Biometria Module | 8083 | HTTP | biometria_db |
+| **PostgreSQL** | 5432 | TCP | - |
+| **pgAdmin** | 5050 | HTTP | - |
+| **Eureka Server** | 8761 | HTTP | - |
+| **Config Server** | 8888 | HTTP | - |
+| **API Gateway** | 8080 | HTTP | - |
+| **Auth Service** | 8081 | HTTP | myerp_auth |
+| **RH Module** | 8082 | HTTP | myerp_rh |
+| **Biometria Module** | 8083 | HTTP | myerp_biometria |
+| **Monitoring Module** | 8084 | HTTP | N/A (memória) |
+| **Company Module** | 8085 | HTTP | myerp_company |
+| **Financial Module** | 8086 | HTTP | myerp_financial |
 
 ## 🔐 Fluxo de Segurança
 

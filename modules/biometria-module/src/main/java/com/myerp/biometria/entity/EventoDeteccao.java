@@ -36,6 +36,9 @@ public class EventoDeteccao {
     @Column(name = "observacoes")
     private String observacoes;
     
+    @Column(name = "device_id")
+    private String deviceId;
+    
     // Construtores
     public EventoDeteccao() {}
     
@@ -77,5 +80,8 @@ public class EventoDeteccao {
     
     public String getObservacoes() { return observacoes; }
     public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
+    
+    public String getDeviceId() { return deviceId; }
+    public void setDeviceId(String deviceId) { this.deviceId = deviceId; }
 }
 

@@ -3,7 +3,7 @@ package com.myerp.biometria.controller;
 import com.myerp.biometria.entity.EventoDeteccao;
 import com.myerp.biometria.entity.TipoMovimento;
 import com.myerp.biometria.entity.StatusProcessamento;
-import com.myerp.biometria.service.CameraSimulatorService;
+import com.myerp.biometria.service.CameraService;
 import com.myerp.biometria.service.EventoDeteccaoRepository;
 import com.myerp.common.dto.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class BiometriaController {
     private EventoDeteccaoRepository eventoRepository;
     
     @Autowired
-    private CameraSimulatorService cameraSimulator;
+    private CameraService cameraService;
     
     @GetMapping("/eventos")
     public BaseResponse<Page<EventoDeteccao>> listarEventos(
@@ -51,12 +51,8 @@ public class BiometriaController {
             @RequestParam(required = false) String horario) {
         
         try {
-            if (horario != null) {
-                cameraSimulator.simularDeteccaoComHorario(nomeFuncionario, movimento, horario);
-            } else {
-                cameraSimulator.simularDeteccaoManual(nomeFuncionario, movimento);
-            }
-            return BaseResponse.success("Detecção simulada com sucesso");
+            // Método removido - usar câmera real
+            return BaseResponse.error("Simulação removida - use câmera real");
         } catch (Exception e) {
             return BaseResponse.error("Erro ao simular detecção: " + e.getMessage());
         }

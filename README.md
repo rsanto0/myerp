@@ -49,14 +49,18 @@ myErp/
 
 ## 🎯 **Módulos Implementados**
 
-| Módulo | Porta | Status | Descrição |
-|--------|-------|--------|-----------|
-| **Eureka Server** | 8761 | ✅ | Service Discovery |
-| **API Gateway** | 8080 | ✅ | Gateway principal |
-| **Auth Service** | 8081 | ✅ | Autenticação JWT |
-| **RH Module** | 8082 | ✅ | Recursos Humanos |
-| **Biometria Module** | 8083 | ✅ | Controle biométrico |
-| **Monitoring Module** | 8084 | ✅ | Dashboard visual |
+| Módulo | Porta | Status | Descrição | Documentação |
+|--------|-------|--------|-----------|---------------|
+| **Eureka Server** | 8761 | ✅ | Service Discovery | [📋 Summary](infrastructure/service-discovery/SERVICE-DISCOVERY-SUMMARY.md) |
+| **API Gateway** | 8080 | ✅ | Gateway principal | [📋 Summary](infrastructure/api-gateway/API-GATEWAY-SUMMARY.md) |
+| **Auth Service** | 8081 | ✅ | Autenticação JWT | [📋 Summary](infrastructure/auth-service/AUTH-SERVICE-SUMMARY.md) |
+| **Config Server** | 8888 | ✅ | Configurações | [📋 Summary](infrastructure/config-server/CONFIG-SERVER-SUMMARY.md) |
+| **RH Module** | 8082 | ✅ | Recursos Humanos | [📋 Summary](modules/rh-module/RH-MODULE-SUMMARY.md) |
+| **Biometria Module** | 8083 | ✅ | Controle biométrico | [📋 Summary](modules/biometria-module/BIOMETRIA-MODULE-SUMMARY.md) |
+| **Monitoring Module** | 8084 | ✅ | Dashboard visual | [📋 Summary](modules/monitoring-module/MONITORING-MODULE-SUMMARY.md) |
+| **Company Module** | 8085 | ✅ | Gestão multi-tenant | [📋 Summary](modules/company-module/COMPANY-MODULE-SUMMARY.md) |
+| **Financial Module** | 8086 | ✅ | Gestão financeira | [📋 Summary](modules/financial-module/FINANCIAL-MODULE-SUMMARY.md) |
+| **Device Management** | 8087 | ✅ | Gestão de dispositivos | [📋 Summary](modules/device-management-module/DEVICE-MANAGEMENT-SUMMARY.md) |
 
 ## 🛠️ **Tecnologias**
 
@@ -66,6 +70,35 @@ myErp/
 - **Containers**: Docker, Docker Compose
 - **Cloud**: AWS (CloudFormation, ECS, RDS, Route 53)
 - **Monitoring**: Spring Actuator, Custom Dashboard
+
+## 🐳 **Containerização**
+
+Todos os módulos possuem **Dockerfile** para deploy independente:
+
+### **Infrastructure**
+- `service-discovery/Dockerfile` - Eureka Server (8761)
+- `api-gateway/Dockerfile` - Gateway Principal (8080)
+- `auth-service/Dockerfile` - Autenticação JWT (8081)
+- `config-server/Dockerfile` - Configurações (8888)
+
+### **Modules**
+- `rh-module/Dockerfile` - Recursos Humanos (8082)
+- `biometria-module/Dockerfile` - Controle Biométrico (8083)
+- `monitoring-module/Dockerfile` - Dashboard (8084)
+- `company-module/Dockerfile` - Gestão Empresas (8085)
+- `financial-module/Dockerfile` - Financeiro (8086)
+
+### **Build & Deploy**
+```bash
+# Build individual
+docker build -t myerp/auth-service:1.0.0 infrastructure/auth-service/
+
+# Build todos os módulos
+docker-compose build
+
+# Deploy produção
+docker-compose -f docker-compose.prod.yml up -d
+```
 
 ## 📚 **Documentação**
 

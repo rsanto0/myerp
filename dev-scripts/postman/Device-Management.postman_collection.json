@@ -1,0 +1,255 @@
+{
+	"info": {
+		"_postman_id": "device-management-collection",
+		"name": "MyERP - Device Management Module",
+		"description": "Collection para testar APIs do Device Management Module (Porta 8087)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{device_url}}/actuator/health",
+					"host": [
+						"{{device_url}}"
+					],
+					"path": [
+						"actuator",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Device Management",
+			"item": [
+				{
+					"name": "Listar Todos os Dispositivos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{device_url}}/api/devices",
+							"host": [
+								"{{device_url}}"
+							],
+							"path": [
+								"api",
+								"devices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Dispositivo por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{device_url}}/api/devices/CAM001",
+							"host": [
+								"{{device_url}}"
+							],
+							"path": [
+								"api",
+								"devices",
+								"CAM001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar Novo Dispositivo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"deviceId\": \"CAM003\",\n  \"name\": \"Câmera Financeiro\",\n  \"type\": \"FACE_RECOGNITION_CAMERA\",\n  \"location\": \"Departamento Financeiro\",\n  \"ipAddress\": \"192.168.1.103\",\n  \"port\": 554\n}"
+						},
+						"url": {
+							"raw": "{{device_url}}/api/devices",
+							"host": [
+								"{{device_url}}"
+							],
+							"path": [
+								"api",
+								"devices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Capturar Dados do Dispositivo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{device_url}}/api/devices/CAM001/capture",
+							"host": [
+								"{{device_url}}"
+							],
+							"path": [
+								"api",
+								"devices",
+								"CAM001",
+								"capture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Status do Dispositivo",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{device_url}}/api/devices/CAM001/status?status=MAINTENANCE",
+							"host": [
+								"{{device_url}}"
+							],
+							"path": [
+								"api",
+								"devices",
+								"CAM001",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "MAINTENANCE"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Camera Management",
+			"item": [
+				{
+					"name": "Testar Câmera",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{device_url}}/api/devices/camera/testar",
+							"host": [
+								"{{device_url}}"
+							],
+							"path": [
+								"api",
+								"devices",
+								"camera",
+								"testar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Capturar Foto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{device_url}}/api/devices/camera/capturar-foto",
+							"host": [
+								"{{device_url}}"
+							],
+							"path": [
+								"api",
+								"devices",
+								"camera",
+								"capturar-foto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Capturar com Detecção Facial",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{device_url}}/api/devices/camera/capturar-facial?segundos=10",
+							"host": [
+								"{{device_url}}"
+							],
+							"path": [
+								"api",
+								"devices",
+								"camera",
+								"capturar-facial"
+							],
+							"query": [
+								{
+									"key": "segundos",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Inicializar Câmera",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{device_url}}/api/devices/camera/inicializar",
+							"host": [
+								"{{device_url}}"
+							],
+							"path": [
+								"api",
+								"devices",
+								"camera",
+								"inicializar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Finalizar Câmera",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{device_url}}/api/devices/camera/finalizar",
+							"host": [
+								"{{device_url}}"
+							],
+							"path": [
+								"api",
+								"devices",
+								"camera",
+								"finalizar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": []
+}

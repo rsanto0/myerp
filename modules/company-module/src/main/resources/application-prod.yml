@@ -1,0 +1,18 @@
+# Profile para produção
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:myerp_company}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USER:myerp_user}
+    password: ${DB_PASS:myerp_pass}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+
+logging:
+  level:
+    com.myerp.company: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN

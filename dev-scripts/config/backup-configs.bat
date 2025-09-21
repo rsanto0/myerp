@@ -11,7 +11,7 @@ echo Criando backup em: %BACKUP_DIR%
 mkdir "%BACKUP_DIR%" 2>nul
 
 echo [1/5] Backup Docker Compose...
-xcopy "..\..\docker-compose.yml" "%BACKUP_DIR%\" /Y >nul
+xcopy "..\docker-compose.yml" "%BACKUP_DIR%\" /Y >nul
 
 echo [2/5] Backup Config Server...
 xcopy "..\..\infrastructure\config-server\src\main\resources\config-repo\*.yml" "%BACKUP_DIR%\config-repo\" /Y >nul
@@ -22,8 +22,10 @@ xcopy "..\..\infrastructure\auth-service\src\main\resources\*.yml" "%BACKUP_DIR%
 echo [4/5] Backup Módulos...
 xcopy "..\..\modules\*\src\main\resources\application.yml" "%BACKUP_DIR%\modules\" /Y /S >nul
 
-echo [5/5] Backup Scripts...
-xcopy "..\*.bat" "%BACKUP_DIR%\scripts\" /Y /S >nul
+echo [5/6] Backup Scripts SQL...
+xcopy "..\database\sql\*.sql" "%BACKUP_DIR%\sql\" /Y >nul
+echo [6/6] Backup Scripts Dev...
+xcopy "..\**\*.bat" "%BACKUP_DIR%\scripts\" /Y /S >nul
 
 echo.
 echo ✅ Backup criado com sucesso em: %BACKUP_DIR%

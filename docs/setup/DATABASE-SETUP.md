@@ -11,11 +11,12 @@ O MyERP utiliza **PostgreSQL** como banco de dados padrão, com suporte a múlti
 ### **1. Usando Docker (Recomendado)**
 ```bash
 # Iniciar PostgreSQL via Docker Compose
-cd dev-scripts/database
-start-postgres.bat
+cd dev-scripts
+docker-compose up -d postgres
 
 # Criar bancos automaticamente
-create-databases.bat
+cd database
+powershell -ExecutionPolicy Bypass -File init-myerp.ps1
 ```
 
 ### **2. Instalação Manual**
@@ -114,14 +115,14 @@ spring:
 
 ## 🔐 **ALTERAÇÃO DE CREDENCIAIS**
 
-### **Método Simples (Recomendado)**
+### **Método Automatizado (Recomendado)**
 ```bash
-# Configurador interativo simples
-cd dev-scripts/config
-configure-datasources-simple.bat
+# Configurador completo de datasources
+cd dev-scripts/database
+configure-datasources.bat
 
-# Pergunta apenas usuário e senha
-# Atualiza todos os 13 arquivos automaticamente
+# Configura usuário, senha e tipo de banco
+# Atualiza todos os arquivos automaticamente
 ```
 
 ### **Método Completo**
@@ -178,7 +179,7 @@ spring:
 
 ### **Bancos Criados Automaticamente**
 ```sql
--- Módulos ativos
+-- Módulos implementados
 CREATE DATABASE myerp_auth;
 CREATE DATABASE myerp_rh;
 CREATE DATABASE myerp_biometria;
@@ -190,6 +191,9 @@ CREATE DATABASE myerp_monitoring;
 CREATE DATABASE myerp_vendas;
 CREATE DATABASE myerp_estoque;
 CREATE DATABASE myerp_compras;
+
+-- Dados iniciais carregados via scripts SQL
+-- Localização: dev-scripts/database/sql/*.sql
 ```
 
 ### **Estratégia de Schema**

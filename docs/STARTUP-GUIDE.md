@@ -1,14 +1,17 @@
-# Guia de Inicialização - MyERP
+# 🚀 Guia de Inicialização - MyERP
 
-## 🚀 Inicialização Automática
+## ⚡ **Inicialização Automática (Recomendado)**
 
-### Método Rápido
+### **Método Rápido**
 ```bash
-# Iniciar tudo automaticamente
-dev-scripts/start-myerp.bat
+# Iniciar sistema completo
+dev-scripts/core/start-myerp.bat
 
-# Parar tudo
-dev-scripts/stop-myerp.bat
+# Parar sistema
+dev-scripts/core/stop-myerp.bat
+
+# Reiniciar sistema
+dev-scripts/core/restart-myerp.bat
 ```
 
 ## 📋 Ordem Manual de Inicialização
@@ -67,41 +70,77 @@ mvn spring-boot:run
 
 ### 6️⃣ RH Module
 ```bash
-cd modules/rh-module/sistema-ponto
-mvn spring-boot:run
+cd modules/rh-module
+mvn spring-boot:run -Dspring.profiles.active=local
 ```
 - **Porta:** 8082
-- **Database:** rh_db (PostgreSQL)
+- **Database:** myerp_rh (PostgreSQL)
 - **Função:** Controle de ponto e funcionários
 - **Aguardar:** 25 segundos
 
 ### 7️⃣ Biometria Module
 ```bash
 cd modules/biometria-module
-mvn spring-boot:run
+mvn spring-boot:run -Dspring.profiles.active=local
 ```
 - **Porta:** 8083
-- **Database:** biometria_db (PostgreSQL)
-- **Função:** Reconhecimento facial e ponto automático
+- **Database:** myerp_biometria (PostgreSQL)
+- **Função:** Simulador biométrico e ponto automático
+- **Aguardar:** 25 segundos
+
+### 8️⃣ Company Module
+```bash
+cd modules/company-module
+mvn spring-boot:run -Dspring.profiles.active=local
+```
+- **Porta:** 8085
+- **Database:** myerp_company (PostgreSQL)
+- **Função:** Gestão multi-tenant de empresas
+- **Aguardar:** 25 segundos
+
+### 9️⃣ Financial Module
+```bash
+cd modules/financial-module
+mvn spring-boot:run -Dspring.profiles.active=local
+```
+- **Porta:** 8086
+- **Database:** myerp_financial (PostgreSQL)
+- **Função:** Boletos, PIX e conciliação bancária
+- **Aguardar:** 25 segundos
+
+### 🔟 Monitoring Module (Opcional)
+```bash
+cd modules/monitoring-module
+mvn spring-boot:run -Dspring.profiles.active=local
+```
+- **Porta:** 8084
+- **Função:** Dashboard de monitoramento
+- **Aguardar:** 25 segundos
 
 ## 🔗 URLs do Sistema
 
 | Serviço | URL | Descrição |
 |---------|-----|-----------|
-| Eureka Dashboard | http://localhost:8761 | Monitoramento de serviços |
-| API Gateway | http://localhost:8080 | Ponto de entrada principal |
-| Auth Service | http://localhost:8081 | Autenticação direta |
-| RH Module | http://localhost:8082 | Sistema de ponto direto |
-| Biometria Module | http://localhost:8083 | Biometria direta |
-| pgAdmin | http://localhost:5050 | Interface PostgreSQL |
+| **Eureka Dashboard** | http://localhost:8761 | Monitoramento de serviços |
+| **API Gateway** | http://localhost:8080 | Ponto de entrada principal |
+| **Auth Service** | http://localhost:8081 | Autenticação JWT |
+| **RH Module** | http://localhost:8082 | Sistema de ponto |
+| **Biometria Module** | http://localhost:8083 | Controle biométrico |
+| **Monitoring Module** | http://localhost:8084 | Dashboard de monitoramento |
+| **Company Module** | http://localhost:8085 | Gestão de empresas |
+| **Financial Module** | http://localhost:8086 | Gestão financeira |
+| **pgAdmin** | http://localhost:5050 | Interface PostgreSQL |
 
 ## 🗄️ Databases PostgreSQL
 
 | Módulo | Database | Tabelas Principais |
 |--------|----------|-------------------|
-| Auth Service | auth_db | users |
-| RH Module | rh_db | funcionarios, registros_ponto |
-| Biometria Module | biometria_db | evento_deteccao, sugestao_rh |
+| **Auth Service** | myerp_auth | users |
+| **RH Module** | myerp_rh | funcionarios, registros_ponto |
+| **Biometria Module** | myerp_biometria | eventos_biometria, sugestoes_rh |
+| **Company Module** | myerp_company | empresas, departamentos, cargos |
+| **Financial Module** | myerp_financial | boletos, transacoes_pix, conciliacao |
+| **Monitoring Module** | N/A | Sem banco (métricas em memória) |
 
 ### Credenciais PostgreSQL
 - **Host:** localhost:5432

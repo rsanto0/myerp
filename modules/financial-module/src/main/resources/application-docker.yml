@@ -1,0 +1,16 @@
+# Profile para ambiente Docker
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/myerp_financial
+    driver-class-name: org.postgresql.Driver
+    username: myerp_user
+    password: myerp_pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+
+logging:
+  level:
+    com.myerp.financial: INFO

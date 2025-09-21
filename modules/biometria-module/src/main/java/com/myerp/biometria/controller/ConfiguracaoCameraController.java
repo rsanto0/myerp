@@ -2,7 +2,7 @@ package com.myerp.biometria.controller;
 
 import com.myerp.biometria.entity.ConfiguracaoCamera;
 import com.myerp.biometria.repository.ConfiguracaoCameraRepository;
-import com.myerp.biometria.service.CameraRealService;
+import com.myerp.biometria.service.CameraService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +19,10 @@ public class ConfiguracaoCameraController {
     
     private static final Logger logger = LoggerFactory.getLogger(ConfiguracaoCameraController.class);
     private final ConfiguracaoCameraRepository configRepository;
-    private final CameraRealService cameraService;
+    private final CameraService cameraService;
     
     public ConfiguracaoCameraController(ConfiguracaoCameraRepository configRepository, 
-                                      CameraRealService cameraService) {
+                                      CameraService cameraService) {
         this.configRepository = configRepository;
         this.cameraService = cameraService;
     }
@@ -98,6 +98,98 @@ public class ConfiguracaoCameraController {
             return ResponseEntity.internalServerError().body(Map.of(
                 "success", false,
                 "message", "Erro interno ao criar configuração"
+            ));
+        }
+    }
+    
+    /**
+     * Atualizar configuração existente
+     */
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<?> atualizarConfiguracao(@PathVariable Long id, @RequestBody ConfiguracaoCameraRequest request) {
+        logger.info("[CONFIG_CAMERA] Atualizando configuração ID: {}", id);
+        
+        try {
+            Optional<ConfiguracaoCamera> configOpt = configRepository.findById(id);
+            
+            if (configOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            ConfiguracaoCamera config = configOpt.get();
+            
+            // Verificar conflitos de nome/alias (exceto própria configuração)
+            Optional<ConfiguracaoCamera> existenteNome = configRepository
+                .findByNomeConfiguracaoIgnoreCase(request.getNomeConfiguracao());
+            Optional<ConfiguracaoCamera> existenteAlias = configRepository
+                .findByAliasIgnoreCase(request.getAlias());
+            
+            if (existenteNome.isPresent() && !existenteNome.get().getId().equals(id)) {
+                return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", "Já existe outra configuração com este nome"
+                ));
+            }
+            
+            if (existenteAlias.isPresent() && !existenteAlias.get().getId().equals(id)) {
+                return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", "Já existe outra configuração com este alias"
+                ));
+            }
+            
+            // Atualizar dados básicos
+            config.setNomeConfiguracao(request.getNomeConfiguracao());
+            config.setAlias(request.getAlias());
+            config.setMarcaModelo(request.getMarcaModelo());
+            config.setTipoCamera(ConfiguracaoCamera.TipoCamera.valueOf(request.getTipoCamera()));
+            config.setResolucao(request.getResolucao());
+            config.setSistemaOperacional(request.getSistemaOperacional());
+            
+            // Limpar configurações antigas
+            config.setIndiceUsb(null);
+            config.setVidPid(null);
+            config.setEnderecoIp(null);
+            config.setPorta(null);
+            config.setProtocolo(null);
+            config.setUsuario(null);
+            config.setSenha(null);
+            config.setUrlStream(null);
+            
+            // Aplicar novas configurações por tipo
+            if ("USB".equals(request.getTipoCamera())) {
+                config.setIndiceUsb(request.getIndiceUsb());
+                config.setVidPid(request.getVidPid());
+            } else if ("IP".equals(request.getTipoCamera())) {
+                config.setEnderecoIp(request.getEnderecoIp());
+                config.setPorta(request.getPorta());
+                config.setProtocolo(request.getProtocolo());
+                config.setUsuario(request.getUsuario());
+                config.setSenha(request.getSenha());
+                config.setUrlStream(request.getUrlStream());
+            }
+            
+            // Configurações opcionais
+            if (request.getFps() != null) config.setFps(request.getFps());
+            if (request.getQualidadeJpeg() != null) config.setQualidadeJpeg(request.getQualidadeJpeg());
+            if (request.getTimeoutConexao() != null) config.setTimeoutConexao(request.getTimeoutConexao());
+            
+            config.setDataAtualizacao(LocalDateTime.now());
+            ConfiguracaoCamera atualizada = configRepository.save(config);
+            
+            logger.info("[CONFIG_CAMERA] ✅ Configuração atualizada - ID: {}", atualizada.getId());
+            
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Configuração atualizada com sucesso",
+                "configId", atualizada.getId()
+            ));
+            
+        } catch (Exception e) {
+            logger.error("[CONFIG_CAMERA] ❌ Erro ao atualizar configuração: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(Map.of(
+                "success", false,
+                "message", "Erro interno ao atualizar configuração"
             ));
         }
     }
