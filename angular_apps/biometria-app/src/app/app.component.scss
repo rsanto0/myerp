@@ -1,0 +1,31 @@
+// Estilos do componente principal
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: white;
+}
+
+.loading-text {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.main-content {
+  min-height: 100vh;
+}
+
+.notifications-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}

@@ -1,0 +1,130 @@
+<!-- 🔐 TELA DE LOGIN -->
+<div class="login-container">
+  
+  <!-- 🎨 CARD DE LOGIN -->
+  <mat-card class="login-card">
+    
+    <!-- 🏢 HEADER COM LOGO -->
+    <mat-card-header class="login-header">
+      <div class="logo-container">
+        <mat-icon class="logo-icon">business</mat-icon>
+        <div class="logo-text">
+          <h1>MyERP</h1>
+          <p>Ponto Biométrico</p>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <!-- 📝 FORMULÁRIO -->
+    <mat-card-content class="login-content">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        
+        <!-- 📧 CAMPO EMAIL -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input 
+            matInput 
+            type="email" 
+            formControlName="email"
+            placeholder="seu@email.com"
+            autocomplete="email">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="emailControl?.invalid && emailControl?.touched">
+            {{ emailErrorMessage }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- 🔒 CAMPO SENHA -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Senha</mat-label>
+          <input 
+            matInput 
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Sua senha"
+            autocomplete="current-password">
+          <button 
+            mat-icon-button 
+            matSuffix 
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="'Mostrar senha'"
+            [attr.aria-pressed]="!hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="passwordControl?.invalid && passwordControl?.touched">
+            {{ passwordErrorMessage }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- ☑️ LEMBRAR-ME -->
+        <div class="login-options">
+          <mat-checkbox formControlName="rememberMe">
+            Lembrar-me
+          </mat-checkbox>
+          
+          <button 
+            type="button" 
+            mat-button 
+            color="primary"
+            (click)="onForgotPassword()">
+            Esqueci minha senha
+          </button>
+        </div>
+
+        <!-- 🔘 BOTÃO LOGIN -->
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit"
+          class="login-button full-width"
+          [disabled]="isLoading">
+          
+          <mat-spinner 
+            *ngIf="isLoading" 
+            diameter="20" 
+            class="button-spinner">
+          </mat-spinner>
+          
+          <span *ngIf="!isLoading">ENTRAR</span>
+          <span *ngIf="isLoading">ENTRANDO...</span>
+        </button>
+
+      </form>
+    </mat-card-content>
+
+    <!-- 👆 OPÇÕES ALTERNATIVAS -->
+    <mat-card-actions class="login-actions">
+      
+      <!-- DIVISOR -->
+      <div class="divider">
+        <span>ou</span>
+      </div>
+
+      <!-- BOTÃO BIOMETRIA -->
+      <button 
+        mat-stroked-button 
+        color="accent"
+        class="biometric-button full-width"
+        (click)="onBiometricLogin()">
+        <mat-icon>fingerprint</mat-icon>
+        Entrar com Biometria
+      </button>
+
+    </mat-card-actions>
+
+  </mat-card>
+
+  <!-- 📱 INFORMAÇÕES ADICIONAIS -->
+  <div class="info-section">
+    <p class="version-info">
+      <mat-icon>info</mat-icon>
+      MyERP v1.0.0 - Sistema de Ponto Eletrônico
+    </p>
+    
+    <p class="support-info">
+      Problemas? Entre em contato com o suporte
+    </p>
+  </div>
+
+</div>

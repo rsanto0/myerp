@@ -1,0 +1,256 @@
+// 🎨 ESTILOS DA TELA DE LOGIN
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+// 🏢 HEADER
+.login-header {
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  color: white;
+  padding: 24px;
+  text-align: center;
+  
+  .logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .logo-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .logo-text {
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 300;
+    }
+    
+    p {
+      margin: 4px 0 0 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+  }
+}
+
+// 📝 CONTEÚDO
+.login-content {
+  padding: 32px 24px 24px 24px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0 24px 0;
+  
+  mat-checkbox {
+    font-size: 14px;
+  }
+  
+  button {
+    font-size: 12px;
+    text-transform: none;
+  }
+}
+
+.login-button {
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  position: relative;
+  
+  .button-spinner {
+    position: absolute;
+    left: 16px;
+  }
+}
+
+// 👆 AÇÕES
+.login-actions {
+  padding: 0 24px 24px 24px;
+}
+
+.divider {
+  text-align: center;
+  margin: 16px 0;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e0e0e0;
+  }
+  
+  span {
+    background: white;
+    padding: 0 16px;
+    color: #666;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+}
+
+.biometric-button {
+  height: 44px;
+  
+  mat-icon {
+    margin-right: 8px;
+  }
+}
+
+// 📱 INFORMAÇÕES
+.info-section {
+  margin-top: 24px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  
+  .version-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 12px;
+    margin-bottom: 8px;
+    
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  .support-info {
+    font-size: 11px;
+    opacity: 0.7;
+    margin: 0;
+  }
+}
+
+// 📱 RESPONSIVIDADE
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+  }
+  
+  .login-card {
+    max-width: 100%;
+  }
+  
+  .login-header {
+    padding: 20px;
+    
+    .logo-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+    }
+    
+    .logo-text h1 {
+      font-size: 24px;
+    }
+  }
+  
+  .login-content {
+    padding: 24px 20px 20px 20px;
+  }
+  
+  .login-actions {
+    padding: 0 20px 20px 20px;
+  }
+}
+
+// 🎨 ANIMAÇÕES
+.login-card {
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 🔔 SNACKBAR CUSTOMIZADO
+::ng-deep {
+  .success-snackbar {
+    background: #4caf50 !important;
+    color: white !important;
+  }
+  
+  .error-snackbar {
+    background: #f44336 !important;
+    color: white !important;
+  }
+  
+  .info-snackbar {
+    background: #2196f3 !important;
+    color: white !important;
+  }
+}
+
+// 🎯 ESTADOS DOS CAMPOS
+mat-form-field {
+  margin-bottom: 16px;
+  
+  &.mat-focused {
+    .mat-form-field-outline-thick {
+      color: #1976d2;
+    }
+  }
+}
+
+// 🔘 BOTÕES
+button {
+  transition: all 0.3s ease;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+  }
+}

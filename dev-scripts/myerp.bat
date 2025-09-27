@@ -27,12 +27,17 @@ goto end
 
 :start_all
 echo Iniciando sistema completo...
-call core\start-myerp.bat
+echo Iniciando PostgreSQL...
+docker start myerp-postgres >nul 2>&1
+echo Iniciando servicos com Docker Compose...
+docker-compose up -d
+echo Sistema iniciado!
 goto end
 
 :stop_all
 echo Parando sistema...
-call core\stop-myerp.bat
+docker-compose down
+echo Sistema parado!
 goto end
 
 :status

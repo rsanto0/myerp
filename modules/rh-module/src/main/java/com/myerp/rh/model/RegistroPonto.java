@@ -15,13 +15,12 @@ public class RegistroPonto {
     private LocalDateTime dataHora;
 
     @ManyToOne
+    @JoinColumn(name = "funcionario_id")
     private Usuario funcionario;
 
     @Enumerated(EnumType.STRING)
     @NotNull
     private TipoPonto tipo;
-    
-    private Long funcionarioId;
     
     private String observacoes;
 
@@ -37,8 +36,19 @@ public class RegistroPonto {
     public TipoPonto getTipo() { return tipo; }
     public void setTipo(TipoPonto tipo) { this.tipo = tipo; }
     
-    public Long getFuncionarioId() { return funcionarioId; }
-    public void setFuncionarioId(Long funcionarioId) { this.funcionarioId = funcionarioId; }
+    public Long getFuncionarioId() { 
+        return funcionario != null ? funcionario.getId() : null; 
+    }
+    
+    public void setFuncionarioId(Long funcionarioId) { 
+        if (funcionarioId != null) {
+            Usuario user = new Usuario();
+            user.setId(funcionarioId);
+            this.funcionario = user;
+        } else {
+            this.funcionario = null;
+        }
+    }
     
     public String getObservacoes() { return observacoes; }
     public void setObservacoes(String observacoes) { this.observacoes = observacoes; }

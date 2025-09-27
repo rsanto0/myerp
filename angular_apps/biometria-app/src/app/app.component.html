@@ -1,0 +1,24 @@
+<!-- 🎨 TEMPLATE PRINCIPAL DO APP -->
+<div class="app-container">
+  
+  <!-- 🔄 LOADING INICIAL -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p class="loading-text">Carregando MyERP...</p>
+  </div>
+
+  <!-- 📱 CONTEÚDO PRINCIPAL -->
+  <div *ngIf="!isLoading" class="main-content">
+    
+    <!-- 🗺️ ROUTER OUTLET - Onde as páginas são exibidas -->
+    <router-outlet></router-outlet>
+    
+  </div>
+
+  <!-- 🔔 SNACKBAR PARA NOTIFICAÇÕES -->
+  <div class="notifications-container">
+    <!-- Notificações serão exibidas aqui -->
+  </div>
+
+</div>
+

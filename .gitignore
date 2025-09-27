@@ -40,3 +40,5 @@ logs/
 # Spring Boot
 application-local.yml
 application-dev.yml
+angular_apps/biometria-app/.angular/cache/
+angular_apps/biometria-app/node_modules/

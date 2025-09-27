@@ -336,8 +336,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{biometria_url}}/api/biometria/simular-deteccao?nomeFuncionario=Joao Silva&movimento=ENTRADA",
-							"host": ["{{biometria_url}}"],
+							"raw": "http://localhost:8083/api/biometria/simular-deteccao?nomeFuncionario=Joao Silva&movimento=ENTRADA",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
 							"path": ["api", "biometria", "simular-deteccao"],
 							"query": [
 								{
@@ -358,8 +360,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{biometria_url}}/api/biometria/simular-deteccao?nomeFuncionario=Joao Silva&movimento=SAIDA",
-							"host": ["{{biometria_url}}"],
+							"raw": "http://localhost:8083/api/biometria/simular-deteccao?nomeFuncionario=Joao Silva&movimento=SAIDA",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
 							"path": ["api", "biometria", "simular-deteccao"],
 							"query": [
 								{
@@ -380,8 +384,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{biometria_url}}/api/biometria/eventos",
-							"host": ["{{biometria_url}}"],
+							"raw": "http://localhost:8083/api/biometria/eventos",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
 							"path": ["api", "biometria", "eventos"]
 						}
 					}
@@ -392,8 +398,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{biometria_url}}/api/biometria/eventos/pendentes",
-							"host": ["{{biometria_url}}"],
+							"raw": "http://localhost:8083/api/biometria/eventos/pendentes",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
 							"path": ["api", "biometria", "eventos", "pendentes"]
 						}
 					}
@@ -404,8 +412,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{biometria_url}}/api/biometria/dashboard",
-							"host": ["{{biometria_url}}"],
+							"raw": "http://localhost:8083/api/biometria/dashboard",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
 							"path": ["api", "biometria", "dashboard"]
 						}
 					}
@@ -421,8 +431,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{monitoring_url}}/api/monitoring/dashboard",
-							"host": ["{{monitoring_url}}"],
+							"raw": "http://localhost:8084/api/monitoring/dashboard",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
 							"path": ["api", "monitoring", "dashboard"]
 						}
 					}
@@ -433,8 +445,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{monitoring_url}}/api/monitoring/health",
-							"host": ["{{monitoring_url}}"],
+							"raw": "http://localhost:8084/api/monitoring/health",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
 							"path": ["api", "monitoring", "health"]
 						}
 					}
@@ -445,8 +459,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{monitoring_url}}/api/monitoring/services",
-							"host": ["{{monitoring_url}}"],
+							"raw": "http://localhost:8084/api/monitoring/services",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
 							"path": ["api", "monitoring", "services"]
 						}
 					}
@@ -457,8 +473,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{monitoring_url}}/api/monitoring/metrics",
-							"host": ["{{monitoring_url}}"],
+							"raw": "http://localhost:8084/api/monitoring/metrics",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
 							"path": ["api", "monitoring", "metrics"]
 						}
 					}
@@ -474,8 +492,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{eureka_url}}/",
-							"host": ["{{eureka_url}}"],
+							"raw": "http://localhost:8761/",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8761",
 							"path": [""]
 						}
 					}
@@ -486,8 +506,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{eureka_url}}/eureka/apps",
-							"host": ["{{eureka_url}}"],
+							"raw": "http://localhost:8761/eureka/apps",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8761",
 							"path": ["eureka", "apps"]
 						}
 					}
@@ -503,8 +525,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{config_url}}/application/default",
-							"host": ["{{config_url}}"],
+							"raw": "http://localhost:8888/application/default",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8888",
 							"path": ["application", "default"]
 						}
 					}
@@ -515,8 +539,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{config_url}}/auth-service/local",
-							"host": ["{{config_url}}"],
+							"raw": "http://localhost:8888/auth-service/local",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8888",
 							"path": ["auth-service", "local"]
 						}
 					}
@@ -527,8 +553,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{config_url}}/notification-service/local",
-							"host": ["{{config_url}}"],
+							"raw": "http://localhost:8888/notification-service/local",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8888",
 							"path": ["notification-service", "local"]
 						}
 					}
@@ -539,8 +567,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{config_url}}/actuator/refresh",
-							"host": ["{{config_url}}"],
+							"raw": "http://localhost:8888/actuator/refresh",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8888",
 							"path": ["actuator", "refresh"]
 						}
 					}
