@@ -1,4 +1,4 @@
-# 🏢 MyERP - Sistema Empresarial Moderno
+# 🏢 MyERP - Sistema Empresarial Moderno (Em construção ...)
 
 ## 🎭 **Analogia: Prédio Empresarial Inteligente**
 
