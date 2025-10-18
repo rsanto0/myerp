@@ -292,8 +292,3 @@ O **MyERP** é um sistema empresarial moderno e completo que oferece:
 - **Monitoramento contínuo** garante funcionamento
 - **Escalabilidade** para crescer conforme necessário
 
-**Um sistema empresarial completo, moderno e pronto para produção! 🏢🚀**
-
----
-
-**MyERP - Transformando gestão empresarial com tecnologia moderna! 💼✨**
