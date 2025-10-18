@@ -36,13 +36,25 @@ public class AuthController {
     }
     
     /**
+     * Debug endpoint para verificar payload bruto
+     */
+    @PostMapping("/login-debug")
+    public ResponseEntity<String> loginDebug(@RequestBody(required = false) String rawBody) {
+        logger.info("[LOGIN-DEBUG] 📦 Raw body recebido: {}", rawBody);
+        return ResponseEntity.ok("Payload recebido: " + rawBody);
+    }
+    
+    /**
      * Autentica usuário e gera token JWT
      * @param request dados de login (login/senha)
      * @return token JWT + dados do usuário ou 401 se inválido
      */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        logger.info("[LOGIN] 🔑 Tentativa de autenticação - Login: {}", request.getLogin());
+        logger.info("[LOGIN] 🔑 Tentativa de autenticação - Login: {}, Senha: {}", 
+                   request.getLogin(), request.getSenha() != null ? "[PRESENTE]" : "[NULL]");
+        logger.debug("[LOGIN] 📦 Payload completo: login='{}', senha='{}'", 
+                    request.getLogin(), request.getSenha());
         
         Usuario user = usuarioRepository.findByLogin(request.getLogin());
         if (user == null) {

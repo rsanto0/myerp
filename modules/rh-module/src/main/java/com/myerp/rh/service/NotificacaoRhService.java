@@ -1,7 +1,8 @@
 package com.myerp.rh.service;
 
-import com.myerp.notification.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +17,8 @@ public class NotificacaoRhService {
     
     private static final Logger logger = LoggerFactory.getLogger(NotificacaoRhService.class);
     
-    @Autowired
-    private EmailService emailService;
+    @Autowired(required = false)
+    private JavaMailSender mailSender;
     
     /**
      * Notifica sobre ponto registrado automaticamente
@@ -42,7 +43,7 @@ public class NotificacaoRhService {
             );
             
             String emailFuncionario = gerarEmailFuncionario(nomeFuncionario);
-            emailService.sendSimpleEmail(emailFuncionario, assunto, mensagem);
+            enviarEmail(emailFuncionario, assunto, mensagem);
             
             logger.info("Notificação de ponto automático enviada para funcionário {}", funcionarioId);
             
@@ -74,7 +75,7 @@ public class NotificacaoRhService {
                 timestamp.toLocalDate()
             );
             
-            emailService.sendSimpleEmail("rh@empresa.com", assunto, mensagem);
+            enviarEmail("rh@empresa.com", assunto, mensagem);
             
             logger.info("Sugestão de validação enviada para RH - funcionário {}", funcionarioId);
             
@@ -90,5 +91,35 @@ public class NotificacaoRhService {
         return nomeFuncionario.toLowerCase()
                              .replace(" ", ".")
                              .replaceAll("[^a-z.]", "") + "@empresa.com";
+    }
+    
+    /**
+     * Envia email real ou simula se não configurado
+     */
+    private void enviarEmail(String destinatario, String assunto, String mensagem) {
+        if (mailSender != null) {
+            try {
+                SimpleMailMessage message = new SimpleMailMessage();
+                message.setTo(destinatario);
+                message.setSubject(assunto);
+                message.setText(mensagem);
+                message.setFrom("noreply@myerp.com");
+                
+                mailSender.send(message);
+                logger.info("📧 Email enviado para: {}", destinatario);
+            } catch (Exception e) {
+                logger.error("❌ Erro ao enviar email: {}", e.getMessage());
+                simularEmail(destinatario, assunto, mensagem);
+            }
+        } else {
+            simularEmail(destinatario, assunto, mensagem);
+        }
+    }
+    
+    private void simularEmail(String destinatario, String assunto, String mensagem) {
+        logger.info("📧 EMAIL SIMULADO (configuração não encontrada):");
+        logger.info("Para: {}", destinatario);
+        logger.info("Assunto: {}", assunto);
+        logger.info("Mensagem: {}", mensagem);
     }
 }

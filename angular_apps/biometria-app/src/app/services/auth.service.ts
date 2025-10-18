@@ -7,8 +7,8 @@ import { environment } from '../../environments/environment';
 
 // 📊 INTERFACES
 export interface LoginRequest {
-  email: string;
-  password: string;
+  login: string;
+  senha: string;
 }
 
 export interface LoginResponse {
@@ -73,9 +73,9 @@ export class AuthService {
   }
 
   // 🔐 LOGIN
-  async login(email: string, password: string): Promise<boolean> {
+  async login(login: string, senha: string): Promise<boolean> {
     try {
-      const loginData: LoginRequest = { email, password };
+      const loginData: LoginRequest = { login, senha };
       console.log('[AuthService] Dados enviados para login:', loginData);
 
       // 🌐 CHAMADA PARA BACKEND (auth-service:8081)
